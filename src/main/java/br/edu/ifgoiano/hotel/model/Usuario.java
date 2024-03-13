@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
+import org.springframework.boot.context.properties.bind.DefaultValue;
 
 import java.util.List;
 
@@ -15,7 +16,7 @@ import java.util.List;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class Usuario {
+public class Usuario{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "usuario_id")
@@ -28,7 +29,6 @@ public class Usuario {
     private String senha;
 
     @Enumerated(EnumType.STRING)
-    @ColumnDefault("'PACIENTE'")
     private UsuarioPapel papel;
 
     @OneToOne(cascade = CascadeType.ALL)

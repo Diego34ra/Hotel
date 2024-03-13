@@ -15,4 +15,8 @@ public enum UsuarioPapel {
     ADMINISTRADOR;
 
     private String papel;
+
+    public static UsuarioPapel getPadrao(){
+        return PACIENTE;
+    }
 }

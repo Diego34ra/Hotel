@@ -22,7 +22,7 @@ public class UsuarioServiceImpl implements UsuarioService {
     }
 
     @Override
-    public List<Usuario> findAll(Long id) {
+    public List<Usuario> findAll() {
         return usuarioRepository.findAll();
     }
 

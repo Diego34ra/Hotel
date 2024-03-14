@@ -17,7 +17,8 @@ public class UsuarioServiceImpl implements UsuarioService {
     private UsuarioRepository usuarioRepository;
     @Override
     public Usuario create(Usuario usuario) {
-        usuario.setPapel(UsuarioPapel.getPadrao());
+        if(usuario.getPapel() == null)
+            usuario.setPapel(UsuarioPapel.getPadrao());
         return usuarioRepository.save(usuario);
     }
 

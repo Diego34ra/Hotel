@@ -10,13 +10,10 @@ import lombok.Setter;
 @NoArgsConstructor
 public enum UsuarioPapel {
 
-    PACIENTE,
-    PROFISSIONAL,
+    CLIENTE,
     ADMINISTRADOR;
 
-    private String papel;
-
     public static UsuarioPapel getPadrao(){
-        return PACIENTE;
+        return CLIENTE;
     }
 }

@@ -1,6 +1,6 @@
 package br.edu.ifgoiano.hotel.controller;
 
-import br.edu.ifgoiano.hotel.model.Quarto;
+import br.edu.ifgoiano.hotel.model.Room;
 import br.edu.ifgoiano.hotel.service.QuartoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,7 +19,7 @@ public class QuartoController {
     private QuartoService quartoService;
 
     @GetMapping
-    public ResponseEntity<List<Quarto>> findAll(){
+    public ResponseEntity<List<Room>> findAll(){
         return ResponseEntity.status(HttpStatus.OK).body(quartoService.findAll());
     }
 }

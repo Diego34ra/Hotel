@@ -7,11 +7,11 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Entity
-@Table(name = "tb_telefone")
+@Table(name = "tb_phone")
 @Getter
 @Setter
 @AllArgsConstructor
-public class Telefone {
+public class Phone {
 
     @Id
     @JsonIgnore
@@ -19,8 +19,8 @@ public class Telefone {
     private Long id;
     private String ddi;
     private String ddd;
-    private String numero;
+    private String number;
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "usuario_id")
-    private Usuario usuario;
+    @JoinColumn(name = "user_id")
+    private User user;
 }

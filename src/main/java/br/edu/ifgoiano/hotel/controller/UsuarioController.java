@@ -1,6 +1,6 @@
 package br.edu.ifgoiano.hotel.controller;
 
-import br.edu.ifgoiano.hotel.model.Usuario;
+import br.edu.ifgoiano.hotel.model.User;
 import br.edu.ifgoiano.hotel.service.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,23 +16,23 @@ public class UsuarioController {
     @Autowired
     private UsuarioService usuarioService;
     @PostMapping
-    public ResponseEntity<Usuario> create(@RequestBody Usuario usuario){
-        var response = usuarioService.create(usuario);
+    public ResponseEntity<User> create(@RequestBody User user){
+        var response = usuarioService.create(user);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
     @GetMapping
-    public ResponseEntity<List<Usuario>> findAll(){
+    public ResponseEntity<List<User>> findAll(){
         return ResponseEntity.status(HttpStatus.OK).body(usuarioService.findAll());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Usuario> findById(@PathVariable Long id){
+    public ResponseEntity<User> findById(@PathVariable Long id){
         return ResponseEntity.status(HttpStatus.OK).body(usuarioService.findById(id));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Usuario> findById(@PathVariable Long id, @RequestBody Usuario usuario){
+    public ResponseEntity<User> findById(@PathVariable Long id, @RequestBody User user){
         return ResponseEntity.status(HttpStatus.OK).body(usuarioService.findById(id));
     }
 

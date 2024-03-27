@@ -1,12 +1,12 @@
 package br.edu.ifgoiano.hotel.service;
 
-import br.edu.ifgoiano.hotel.model.Quarto;
+import br.edu.ifgoiano.hotel.model.Room;
 
 import java.util.List;
 
 public interface QuartoService {
-    Quarto create(Quarto quarto);
-    List<Quarto> findAll();
-    Quarto findById(Long id);
+    Room create(Room quarto);
+    List<Room> findAll();
+    Room findById(Long id);
     void delete(Long id);
 }

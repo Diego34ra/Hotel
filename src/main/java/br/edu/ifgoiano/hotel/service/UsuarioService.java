@@ -1,13 +1,13 @@
 package br.edu.ifgoiano.hotel.service;
 
-import br.edu.ifgoiano.hotel.model.Usuario;
+import br.edu.ifgoiano.hotel.model.User;
 
 import java.util.List;
 
 public interface UsuarioService {
-    Usuario create(Usuario usuario);
-    List<Usuario> findAll();
-    Usuario findById(Long id);
-    Usuario update(Long id,Usuario usuario);
+    User create(User user);
+    List<User> findAll();
+    User findById(Long id);
+    User update(Long id, User user);
     void delete(Long id);
 }

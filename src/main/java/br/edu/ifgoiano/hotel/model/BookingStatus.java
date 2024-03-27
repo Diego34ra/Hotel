@@ -5,8 +5,8 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public enum QuartoTipo {
-    SINGLE,
-    DUPLO,
-    SUITE
+public enum BookingStatus {
+    PENDING,
+    CONFIRMED,
+    CANCELED
 }

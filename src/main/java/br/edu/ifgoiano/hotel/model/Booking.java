@@ -16,21 +16,26 @@ public class Booking {
 
     private int days;
 
-    private Date chekIn;
+    private Date checkInDate;
 
-    private Date chekOut;
+    private Date checkOutDate;
 
     private BigDecimal totalValue;
 
-    @OneToOne(fetch = FetchType.EAGER)
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinColumn(name = "comment_id")
     private Comment comment;
+
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinColumn(name = "checkIn_id")
+    private CheckIn checkIn;
 
     @Enumerated(EnumType.STRING)
     private BookingStatus bookingStatus;
 
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id")
-    private User user;
+    private User client;
 
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "room_id")

@@ -10,12 +10,9 @@ public class CheckIn {
 
     @Id
     @Column(name = "checkIn_id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private Date date;
-
-    @OneToOne
-    @JoinColumn(name = "booking_id")
-    private Booking booking;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id")

@@ -13,8 +13,7 @@ public class Comment {
 
     private String commentText;
 
-    @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "booking_id")
-    private Booking booking;
+//    @OneToOne(fetch = FetchType.EAGER)
+//    private Booking booking;
 
 }

@@ -22,6 +22,9 @@ public class Booking {
 
     private BigDecimal totalValue;
 
+    @OneToOne(fetch = FetchType.EAGER)
+    private Comment comment;
+
     @Enumerated(EnumType.STRING)
     private BookingStatus bookingStatus;
 

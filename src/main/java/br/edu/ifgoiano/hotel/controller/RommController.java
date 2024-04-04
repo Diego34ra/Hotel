@@ -13,7 +13,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("api/v1/quarto")
-public class QuartoController {
+public class RommController {
 
     @Autowired
     private QuartoService quartoService;

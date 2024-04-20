@@ -4,20 +4,21 @@ import br.edu.ifgoiano.hotel.controller.exception.ResourceNotFoundException;
 import br.edu.ifgoiano.hotel.model.User;
 import br.edu.ifgoiano.hotel.model.UserRole;
 import br.edu.ifgoiano.hotel.repository.UserRepository;
-import br.edu.ifgoiano.hotel.service.UsuarioService;
+import br.edu.ifgoiano.hotel.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-public class UsuarioServiceImpl implements UsuarioService {
+public class UserServiceImpl implements UserService {
     @Autowired
     private UserRepository userRepository;
     @Override
     public User create(User user) {
         if(user.getRole() == null)
             user.setRole(UserRole.getPadrao());
+        user.getPhones().forEach(phone -> phone.setUser(user));
         return userRepository.save(user);
     }
 

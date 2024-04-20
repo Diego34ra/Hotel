@@ -4,7 +4,7 @@ import br.edu.ifgoiano.hotel.model.Room;
 
 import java.util.List;
 
-public interface QuartoService {
+public interface RoomService {
     Room create(Room quarto);
     List<Room> findAll();
     Room findById(Long id);

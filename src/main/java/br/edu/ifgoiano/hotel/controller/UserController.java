@@ -1,7 +1,7 @@
 package br.edu.ifgoiano.hotel.controller;
 
 import br.edu.ifgoiano.hotel.model.User;
-import br.edu.ifgoiano.hotel.service.UsuarioService;
+import br.edu.ifgoiano.hotel.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -10,11 +10,11 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("api/v1/usuario")
+@RequestMapping("api/v1/user")
 public class UserController {
 
     @Autowired
-    private UsuarioService usuarioService;
+    private UserService usuarioService;
     @PostMapping
     public ResponseEntity<User> create(@RequestBody User user){
         var response = usuarioService.create(user);

@@ -1,10 +1,18 @@
 package br.edu.ifgoiano.hotel.model;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.math.BigDecimal;
 
 @Entity(name = "tb_room")
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class Room {
 
     @Id

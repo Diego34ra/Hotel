@@ -3,14 +3,14 @@ package br.edu.ifgoiano.hotel.service.impl;
 import br.edu.ifgoiano.hotel.controller.exception.ResourceNotFoundException;
 import br.edu.ifgoiano.hotel.model.Room;
 import br.edu.ifgoiano.hotel.repository.RoomRepository;
-import br.edu.ifgoiano.hotel.service.QuartoService;
+import br.edu.ifgoiano.hotel.service.RoomService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-public class QuartoServiceImpl implements QuartoService {
+public class RoomServiceImpl implements RoomService {
 
     @Autowired
     private RoomRepository roomRepository;

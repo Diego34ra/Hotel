@@ -15,8 +15,8 @@ public class RoomServiceImpl implements RoomService {
     @Autowired
     private RoomRepository roomRepository;
     @Override
-    public Room create(Room quarto) {
-        return roomRepository.save(quarto);
+    public Room create(Room room) {
+        return roomRepository.save(room);
     }
 
     @Override
@@ -51,8 +51,8 @@ public class RoomServiceImpl implements RoomService {
 
     @Override
     public void delete(Long id) {
-        var quartoDelete = roomRepository.findById(id)
+        var roomDelete = roomRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Não foi encontrado nenhum quarto com esse Id."));
-        roomRepository.delete(quartoDelete);
+        roomRepository.delete(roomDelete);
     }
 }

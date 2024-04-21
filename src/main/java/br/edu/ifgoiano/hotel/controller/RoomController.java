@@ -25,7 +25,7 @@ public class RoomController {
     }
 
     @GetMapping
-    @Cacheable("cacheRoom")
+    @Cacheable("cacheRooms")
     public ResponseEntity<List<Room>> findAll(){
         return ResponseEntity.status(HttpStatus.OK).body(roomService.findAll());
     }
@@ -38,6 +38,12 @@ public class RoomController {
     @PutMapping("{id}")
     public ResponseEntity<Room> update(@PathVariable Long id, @RequestBody Room room){
         return ResponseEntity.status(HttpStatus.OK).body(roomService.update(id,room));
+    }
+
+    @DeleteMapping("{id}")
+    public ResponseEntity<?> delete(@PathVariable Long id){
+        roomService.delete(id);
+        return ResponseEntity.noContent().build();
     }
 
 

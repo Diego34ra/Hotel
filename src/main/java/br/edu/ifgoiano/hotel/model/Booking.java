@@ -30,6 +30,10 @@ public class Booking {
     @JoinColumn(name = "checkIn_id")
     private CheckIn checkIn;
 
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinColumn(name = "checkOut_id")
+    private CheckOut checkOut;
+
     @Enumerated(EnumType.STRING)
     private BookingStatus bookingStatus;
 

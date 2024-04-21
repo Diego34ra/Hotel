@@ -34,8 +34,26 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User update(Long id, User user) {
-        return null;
+    public User update(Long id, User userUpdate) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Não foi encontrado nenhum cliente com esse Id."));
+
+        if (userUpdate.getEmail() != null && !userUpdate.getEmail().isEmpty())
+            user.setEmail(userUpdate.getEmail());
+        if (userUpdate.getFirstName() != null && !userUpdate.getFirstName().isEmpty())
+            user.setFirstName(userUpdate.getFirstName());
+        if (userUpdate.getLastName() != null && !userUpdate.getLastName().isEmpty())
+            user.setLastName(userUpdate.getLastName());
+        if (userUpdate.getPassword() != null && !userUpdate.getPassword().isEmpty())
+            user.setPassword(userUpdate.getPassword());
+        if (userUpdate.getRole() != null)
+            user.setRole(userUpdate.getRole());
+        if (userUpdate.getPhones() != null && !userUpdate.getPhones().isEmpty()) {
+            user.setPhones(userUpdate.getPhones());
+            user.getPhones().forEach(phone -> phone.setUser(user));
+        }
+
+        return userRepository.save(user);
     }
 
     @Override

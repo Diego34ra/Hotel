@@ -22,8 +22,8 @@ public class Room {
     private String description;
     private BigDecimal price;
     private Boolean available;
-    private int capacity;
-    private int floor;
+    private Integer capacity;
+    private Integer floor;
 
     @Enumerated(EnumType.STRING)
     private RoomType type;

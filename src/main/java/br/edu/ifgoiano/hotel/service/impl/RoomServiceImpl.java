@@ -31,6 +31,25 @@ public class RoomServiceImpl implements RoomService {
     }
 
     @Override
+    public Room update(Long id,Room roomUpdate) {
+        Room room = roomRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Não foi encontrado nenhum quarto com esse Id."));
+        if(roomUpdate.getCapacity() != null)
+            room.setCapacity(roomUpdate.getCapacity());
+        if(roomUpdate.getPrice() != null)
+            room.setPrice(roomUpdate.getPrice());
+        if(roomUpdate.getFloor() != null)
+            room.setFloor(roomUpdate.getFloor());
+        if(roomUpdate.getType() != null)
+            room.setType(roomUpdate.getType());
+        if(roomUpdate.getAvailable() != null)
+            room.setAvailable(roomUpdate.getAvailable());
+        if(roomUpdate.getDescription() != null)
+            room.setDescription(roomUpdate.getDescription());
+        return roomRepository.save(room);
+    }
+
+    @Override
     public void delete(Long id) {
         var quartoDelete = roomRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Não foi encontrado nenhum quarto com esse Id."));

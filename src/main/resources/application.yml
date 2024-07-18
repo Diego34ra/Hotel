@@ -1,0 +1,17 @@
+# MySQL datasource configuration
+spring:
+  flyway:
+    url: jdbc:mysql://localhost:3306/hotel?useSSL=false&serverTimezone=UTC
+    username: root
+    password:
+  datasource:
+    url: jdbc:mysql://localhost:3306/hotel?useSSL=false&serverTimezone=UTC
+    username: root
+    password:
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL8Dialect
+    hibernate:
+      ddl-auto: create
+    show-sql: true

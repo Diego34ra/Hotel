@@ -1,0 +1,2 @@
+INSERT INTO hotel.tb_user (user_id, cpf, email, first_name, last_name, password, birth, role)
+VALUES (1, '70915932199', 'diegoribeiro13ra@hotmail.com', 'Diego', 'Ribeiro', '123123123', '2024-07-18 00:00:00.000000', 'EMPLOYEE');

@@ -17,6 +17,7 @@ public class Phone {
 
     @Id
     @JsonIgnore
+    @Column(name = "phone_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String ddi;

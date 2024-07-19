@@ -20,6 +20,7 @@ public class RoomOutputDTO {
     private Boolean available;
     private Integer capacity;
     private Integer floor;
+    private String type;
     @JsonManagedReference // Define o lado pai da relação
     private List<CommentOutputDTO> comments;
 }

@@ -1,5 +1,7 @@
 package br.edu.ifgoiano.hotel.service.impl;
 
+import br.edu.ifgoiano.hotel.controller.dto.mapper.MyModelMapper;
+import br.edu.ifgoiano.hotel.controller.dto.request.RoomOutputDTO;
 import br.edu.ifgoiano.hotel.controller.exception.ResourceNotFoundException;
 import br.edu.ifgoiano.hotel.model.Room;
 import br.edu.ifgoiano.hotel.repository.RoomRepository;
@@ -14,20 +16,24 @@ public class RoomServiceImpl implements RoomService {
 
     @Autowired
     private RoomRepository roomRepository;
+
+    @Autowired
+    private MyModelMapper mapper;
     @Override
     public Room create(Room room) {
         return roomRepository.save(room);
     }
 
     @Override
-    public List<Room> findAll() {
-        return roomRepository.findAll();
+    public List<RoomOutputDTO> findAll() {
+        return mapper.toList(roomRepository.findAll(),RoomOutputDTO.class);
     }
 
     @Override
-    public Room findById(Long id) {
-        return roomRepository.findById(id)
+    public RoomOutputDTO findById(Long id) {
+        Room room = roomRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Não foi encontrado nenhum quarto com esse Id."));
+        return mapper.mapTo(room,RoomOutputDTO.class);
     }
 
     @Override

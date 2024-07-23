@@ -1,7 +1,10 @@
 package br.edu.ifgoiano.hotel.service.impl;
 
+import br.edu.ifgoiano.hotel.controller.dto.mapper.MyModelMapper;
+import br.edu.ifgoiano.hotel.controller.dto.request.CommentOutputDTO;
 import br.edu.ifgoiano.hotel.controller.exception.ResourceNotFoundException;
 import br.edu.ifgoiano.hotel.model.Comment;
+import br.edu.ifgoiano.hotel.model.Room;
 import br.edu.ifgoiano.hotel.repository.BookingRepository;
 import br.edu.ifgoiano.hotel.repository.CommentRepository;
 import br.edu.ifgoiano.hotel.service.CommentService;
@@ -28,10 +31,13 @@ public class CommentServiceImpl implements CommentService {
     @Autowired
     private CommentRepository commentRepository;
 
+    @Autowired
+    private MyModelMapper mapper;
+
     @Override
-    public Comment create(Comment comment) {
+    public CommentOutputDTO create(Comment comment) {
         comment.setClient(userService.findById(comment.getClient().getId()));
-        comment.setRoom(roomService.findById(comment.getRoom().getId()));
+        comment.setRoom(mapper.mapTo(roomService.findById(comment.getRoom().getId()), Room.class));
         comment.setDate(LocalDateTime.now());
 
         boolean reservaExistente = bookingRepository.existsByClientAndRoom(comment.getClient(), comment.getRoom());
@@ -39,12 +45,12 @@ public class CommentServiceImpl implements CommentService {
         if (!reservaExistente)
             throw new ResourceNotFoundException("Cliente não fez uma reserva para este quarto.");
 
-        return commentRepository.save(comment);
+        return mapper.mapTo(commentRepository.save(comment),CommentOutputDTO.class);
     }
 
     @Override
-    public List<Comment> findAllByRoomId(Long roomId) {
-        return commentRepository.findAllByRoomId(roomId);
+    public List<CommentOutputDTO> findAllByRoomId(Long roomId) {
+        return mapper.toList(commentRepository.findAllByRoomId(roomId),CommentOutputDTO.class);
     }
 
     @Override
@@ -53,12 +59,12 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public Comment update(Long id, Comment commentUpdate) {
+    public CommentOutputDTO update(Long id, Comment commentUpdate) {
         Comment comment = commentRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Não foi encontrado nenhum comentário com esse id"));
         if(!commentUpdate.getText().isEmpty())
             comment.setText(commentUpdate.getText());
-        return commentRepository.save(comment);
+        return mapper.mapTo(commentRepository.save(comment),CommentOutputDTO.class);
     }
 
     @Override

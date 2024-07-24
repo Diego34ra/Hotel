@@ -24,24 +24,19 @@ public class CommentController {
     @PostMapping
     public ResponseEntity<CommentOutputDTO> create(@RequestBody Comment comment){
         var commentCreated = commentService.create(comment);
-        CommentOutputDTO commentCreatedDto = mapper.mapTo(commentCreated, CommentOutputDTO.class);
-        return ResponseEntity.status(HttpStatus.CREATED).body(commentCreatedDto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(commentCreated);
     }
 
     @GetMapping("/room/{roomId}")
     public ResponseEntity<List<CommentOutputDTO>> findAll(@PathVariable Long roomId){
-            List<Comment> comments = commentService.findAllByRoomId(roomId);
-
-        List<CommentOutputDTO> commentOutputDTOS = mapper.toList(comments, CommentOutputDTO.class);
-
+        List<CommentOutputDTO> commentOutputDTOS = commentService.findAllByRoomId(roomId);
         return ResponseEntity.status(HttpStatus.OK).body(commentOutputDTOS);
     }
 
     @PutMapping("{id}")
     public ResponseEntity<CommentOutputDTO> update(@PathVariable Long id,@RequestBody Comment comment){
         var commentUpdated = commentService.update(id,comment);
-        CommentOutputDTO commentUpdatedDto = mapper.mapTo(commentUpdated, CommentOutputDTO.class);
-        return ResponseEntity.status(HttpStatus.OK).body(commentUpdatedDto);
+        return ResponseEntity.status(HttpStatus.OK).body(commentUpdated);
     }
 
     @DeleteMapping("{id}")

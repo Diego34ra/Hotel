@@ -29,13 +29,13 @@ public class RoomController {
 
     @GetMapping
     public ResponseEntity<List<RoomOutputDTO>> findAll(){
-        List<RoomOutputDTO> rooms = mapper.toList(roomService.findAll(),RoomOutputDTO.class);
+        List<RoomOutputDTO> rooms = roomService.findAll();
         return ResponseEntity.status(HttpStatus.OK).body(rooms);
     }
 
     @GetMapping("{id}")
     public ResponseEntity<RoomOutputDTO> findById(@PathVariable Long id){
-        RoomOutputDTO room = mapper.mapTo(roomService.findById(id),RoomOutputDTO.class);
+        RoomOutputDTO room = roomService.findById(id);
         return ResponseEntity.status(HttpStatus.OK).body(room);
     }
 

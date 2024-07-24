@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.Date;
 import java.util.List;
 
 
@@ -19,6 +20,10 @@ public class UserOutputDTO {
     private String firstName;
 
     private String lastName;
+
+    private String cpf;
+
+    private Date birth;
 
     private String email;
 

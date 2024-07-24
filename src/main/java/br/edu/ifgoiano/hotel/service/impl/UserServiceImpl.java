@@ -1,5 +1,7 @@
 package br.edu.ifgoiano.hotel.service.impl;
 
+import br.edu.ifgoiano.hotel.controller.dto.mapper.MyModelMapper;
+import br.edu.ifgoiano.hotel.controller.dto.request.UserOutputDTO;
 import br.edu.ifgoiano.hotel.controller.exception.ResourceNotFoundException;
 import br.edu.ifgoiano.hotel.model.User;
 import br.edu.ifgoiano.hotel.model.UserRole;
@@ -14,12 +16,15 @@ import java.util.List;
 public class UserServiceImpl implements UserService {
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private MyModelMapper mapper;
     @Override
-    public User create(User user) {
+    public UserOutputDTO create(User user) {
         if(user.getRole() == null)
             user.setRole(UserRole.getPadrao());
         user.getPhones().forEach(phone -> phone.setUser(user));
-        return userRepository.save(user);
+        return mapper.mapTo(userRepository.save(user), UserOutputDTO.class);
     }
 
     @Override

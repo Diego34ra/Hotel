@@ -1,7 +1,15 @@
 package br.edu.ifgoiano.hotel.controller;
 
+import br.edu.ifgoiano.hotel.controller.dto.request.UserOutputDTO;
 import br.edu.ifgoiano.hotel.model.User;
 import br.edu.ifgoiano.hotel.service.UserService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.ExampleObject;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -17,12 +25,27 @@ public class UserController {
     @Autowired
     private UserService userService;
     @PostMapping
-    public ResponseEntity<User> create(@RequestBody User user){
+    @Operation(summary = "Criar um usuário")
+    @ApiResponses({
+            @ApiResponse(responseCode = "201", description = "Usuário criado com sucesso.",content = { @Content(mediaType = "application/json", schema = @Schema(implementation = UserOutputDTO.class))})
+    })
+    public ResponseEntity<UserOutputDTO> create(@RequestBody User user){
         var response = userService.create(user);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
-    @GetMapping(produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
+    @GetMapping
+    @Operation(summary = "Buscar todos os usuários")
+    @ApiResponses({
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Usuários buscados com sucesso.",
+                    content = @Content(
+                            mediaType = "application/json",
+                            array = @ArraySchema(schema = @Schema(implementation = UserOutputDTO.class))
+                    )
+            )
+    })
     public ResponseEntity<List<User>> findAll(){
         return ResponseEntity.status(HttpStatus.OK).body(userService.findAll());
     }

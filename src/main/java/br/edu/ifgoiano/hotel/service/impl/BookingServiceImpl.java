@@ -41,7 +41,7 @@ public class BookingServiceImpl implements BookingService {
     public Booking create(Booking booking) {
         User client = userService.findById(booking.getClient().getId());
 
-        Room room = mapper.mapTo(roomService.findById(booking.getRoom().getId()), Room.class);
+        Room room = mapper.mapObject(roomService.findById(booking.getRoom().getId()), Room.class);
 
         if(!room.getAvailable())
             throw new ResourceBadRequestException("O quarto não está disponível para reserva");

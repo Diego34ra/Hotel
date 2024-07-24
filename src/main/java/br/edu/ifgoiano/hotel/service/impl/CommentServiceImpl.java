@@ -37,7 +37,7 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public CommentOutputDTO create(Comment comment) {
         comment.setClient(userService.findById(comment.getClient().getId()));
-        comment.setRoom(mapper.mapTo(roomService.findById(comment.getRoom().getId()), Room.class));
+        comment.setRoom(mapper.mapObject(roomService.findById(comment.getRoom().getId()), Room.class));
         comment.setDate(LocalDateTime.now());
 
         boolean reservaExistente = bookingRepository.existsByClientAndRoom(comment.getClient(), comment.getRoom());
@@ -45,12 +45,12 @@ public class CommentServiceImpl implements CommentService {
         if (!reservaExistente)
             throw new ResourceNotFoundException("Cliente não fez uma reserva para este quarto.");
 
-        return mapper.mapTo(commentRepository.save(comment),CommentOutputDTO.class);
+        return mapper.mapObject(commentRepository.save(comment),CommentOutputDTO.class);
     }
 
     @Override
     public List<CommentOutputDTO> findAllByRoomId(Long roomId) {
-        return mapper.toList(commentRepository.findAllByRoomId(roomId),CommentOutputDTO.class);
+        return mapper.mapList(commentRepository.findAllByRoomId(roomId),CommentOutputDTO.class);
     }
 
     @Override
@@ -64,7 +64,7 @@ public class CommentServiceImpl implements CommentService {
                 .orElseThrow(() -> new ResourceNotFoundException("Não foi encontrado nenhum comentário com esse id"));
         if(!commentUpdate.getText().isEmpty())
             comment.setText(commentUpdate.getText());
-        return mapper.mapTo(commentRepository.save(comment),CommentOutputDTO.class);
+        return mapper.mapObject(commentRepository.save(comment),CommentOutputDTO.class);
     }
 
     @Override

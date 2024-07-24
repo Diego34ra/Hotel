@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>br.edu.ifgoiano.hotel</groupId>
 	<artifactId>Hotel</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1</version>
 	<name>Hotel</name>
 	<description>Projeto reserva de hotel</description>
 	<url/>

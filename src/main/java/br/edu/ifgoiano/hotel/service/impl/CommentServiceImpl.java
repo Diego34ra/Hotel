@@ -74,8 +74,9 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public void delete(Long id) {
-        Comment comment = commentRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Não foi encontrado nenhum comentário com esse id"));
-        commentRepository.delete(comment);
+        //métodos idempotentes.
+        //Comment comment = commentRepository.findById(id)
+        //        .orElseThrow(() -> new ResourceNotFoundException("Não foi encontrado nenhum comentário com esse id"));
+        commentRepository.deleteById(id);
     }
 }

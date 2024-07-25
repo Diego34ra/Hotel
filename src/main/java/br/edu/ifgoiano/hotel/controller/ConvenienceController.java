@@ -19,7 +19,7 @@ public class ConvenienceController {
 
     @PostMapping
     public ResponseEntity<Convenience> create(@RequestBody Convenience convenience){
-        return ResponseEntity.status(HttpStatus.CREATED).body(convenience);
+        return ResponseEntity.status(HttpStatus.CREATED).body(convenienceService.create(convenience));
     }
 
     @GetMapping
@@ -27,6 +27,8 @@ public class ConvenienceController {
     public ResponseEntity<List<Convenience>> findAll(){
         return ResponseEntity.status(HttpStatus.OK).body(convenienceService.findAll());
     }
+
+
 
     @PutMapping("{id}")
     public ResponseEntity<Convenience> update(@PathVariable Long id,@RequestBody Convenience convenience){

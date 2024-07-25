@@ -67,8 +67,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void delete(Long id) {
-        var usuarioDelete = userRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Não foi encontrado nenhum cliente com esse Id."));
-        userRepository.delete(usuarioDelete);
+        //Métodos idempotentes!
+        //var usuarioDelete = userRepository.findById(id)
+        //        .orElseThrow(() -> new ResourceNotFoundException("Não foi encontrado nenhum cliente com esse Id."));
+        userRepository.deleteById(id);
     }
 }

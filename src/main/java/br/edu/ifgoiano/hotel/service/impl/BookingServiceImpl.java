@@ -2,6 +2,7 @@ package br.edu.ifgoiano.hotel.service.impl;
 
 import br.edu.ifgoiano.hotel.controller.dto.mapper.MyModelMapper;
 import br.edu.ifgoiano.hotel.controller.dto.request.BookingOutputDTO;
+import br.edu.ifgoiano.hotel.controller.dto.request.BookingSimpleOutputDTO;
 import br.edu.ifgoiano.hotel.controller.exception.ResourceBadRequestException;
 import br.edu.ifgoiano.hotel.controller.exception.ResourceNotFoundException;
 import br.edu.ifgoiano.hotel.model.*;
@@ -115,8 +116,8 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
-    public List<Booking> findAll() {
-        return bookingRepository.findAll();
+    public List<BookingSimpleOutputDTO> findAll() {
+        return mapper.toList(bookingRepository.findAll(), BookingSimpleOutputDTO.class);
     }
 
     @Override
@@ -130,9 +131,10 @@ public class BookingServiceImpl implements BookingService {
 
     @Override
     public void delete(Long id) {
-        Booking booking = bookingRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Não foi encontrado nenhuma reserva com esse id."));
-        bookingRepository.delete(booking);
+        //Métodos idempotentes.
+        //Booking booking = bookingRepository.findById(id)
+        //        .orElseThrow(() -> new ResourceNotFoundException("Não foi encontrado nenhuma reserva com esse id."));
+        bookingRepository.deleteById(id);
     }
 
 }

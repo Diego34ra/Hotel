@@ -43,10 +43,12 @@ public class CommentServiceImpl implements CommentService {
         commentCreate.setRoom(mapper.mapTo(roomService.findById(roomId), Room.class));
         commentCreate.setDate(LocalDateTime.now());
 
+
         boolean reservaExistente = bookingRepository.existsByClientAndRoom(commentCreate.getClient(), commentCreate.getRoom());
 
         if (!reservaExistente)
             throw new ResourceNotFoundException("Cliente não fez uma reserva para este quarto.");
+
 
         return mapper.mapTo(commentRepository.save(commentCreate),CommentOutputDTO.class);
     }

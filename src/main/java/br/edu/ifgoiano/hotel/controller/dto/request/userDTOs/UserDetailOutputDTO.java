@@ -1,12 +1,12 @@
-package br.edu.ifgoiano.hotel.controller.dto.request;
+package br.edu.ifgoiano.hotel.controller.dto.request.userDTOs;
 
 import br.edu.ifgoiano.hotel.model.Phone;
+import br.edu.ifgoiano.hotel.model.UserRole;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.Date;
 import java.util.List;
 
 
@@ -14,7 +14,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Setter
-public class UserOutputDTO {
+public class UserDetailOutputDTO {
     private Long id;
 
     private String firstName;
@@ -23,9 +23,9 @@ public class UserOutputDTO {
 
     private String cpf;
 
-    private Date birth;
-
     private String email;
+
+    private UserRole role;
 
     private List<Phone> phones;
 }

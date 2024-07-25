@@ -1,5 +1,6 @@
 package br.edu.ifgoiano.hotel.controller.dto.request;
 
+import br.edu.ifgoiano.hotel.controller.dto.request.userDTOs.UserOutputDTO;
 import br.edu.ifgoiano.hotel.model.*;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;

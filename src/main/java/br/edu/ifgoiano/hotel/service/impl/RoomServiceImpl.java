@@ -26,14 +26,14 @@ public class RoomServiceImpl implements RoomService {
 
     @Override
     public List<RoomOutputDTO> findAll() {
-        return mapper.toList(roomRepository.findAll(),RoomOutputDTO.class);
+        return mapper.mapList(roomRepository.findAll(),RoomOutputDTO.class);
     }
 
     @Override
     public RoomOutputDTO findById(Long id) {
         Room room = roomRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Não foi encontrado nenhum quarto com esse Id."));
-        return mapper.mapTo(room,RoomOutputDTO.class);
+        return mapper.mapObject(room,RoomOutputDTO.class);
     }
 
     @Override

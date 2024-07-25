@@ -1,6 +1,7 @@
 package br.edu.ifgoiano.hotel.service.impl;
 
 import br.edu.ifgoiano.hotel.controller.dto.mapper.MyModelMapper;
+import br.edu.ifgoiano.hotel.controller.dto.request.CommentInputDTO;
 import br.edu.ifgoiano.hotel.controller.dto.request.CommentOutputDTO;
 import br.edu.ifgoiano.hotel.controller.exception.ResourceNotFoundException;
 import br.edu.ifgoiano.hotel.model.Comment;
@@ -36,17 +37,18 @@ public class CommentServiceImpl implements CommentService {
     private MyModelMapper mapper;
 
     @Override
-    public CommentOutputDTO create(Comment comment) {
-        comment.setClient(mapper.mapTo(userService.findById(comment.getClient().getId()), User.class));
-        comment.setRoom(mapper.mapTo(roomService.findById(comment.getRoom().getId()), Room.class));
-        comment.setDate(LocalDateTime.now());
+    public CommentOutputDTO create(CommentInputDTO comment, Long clientId, Long roomId) {
+        var commentCreate = mapper.mapTo(comment,Comment.class);
+        commentCreate.setClient(mapper.mapTo(userService.findById(clientId), User.class));
+        commentCreate.setRoom(mapper.mapTo(roomService.findById(roomId), Room.class));
+        commentCreate.setDate(LocalDateTime.now());
 
-        boolean reservaExistente = bookingRepository.existsByClientAndRoom(comment.getClient(), comment.getRoom());
+        boolean reservaExistente = bookingRepository.existsByClientAndRoom(commentCreate.getClient(), commentCreate.getRoom());
 
         if (!reservaExistente)
             throw new ResourceNotFoundException("Cliente não fez uma reserva para este quarto.");
 
-        return mapper.mapTo(commentRepository.save(comment),CommentOutputDTO.class);
+        return mapper.mapTo(commentRepository.save(commentCreate),CommentOutputDTO.class);
     }
 
     @Override
@@ -60,7 +62,7 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public CommentOutputDTO update(Long id, Comment commentUpdate) {
+    public CommentOutputDTO update(Long id, CommentInputDTO commentUpdate) {
         Comment comment = commentRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Não foi encontrado nenhum comentário com esse id"));
         if(!commentUpdate.getText().isEmpty())

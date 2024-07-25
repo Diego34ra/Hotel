@@ -1,5 +1,7 @@
-package br.edu.ifgoiano.hotel.model;
+package br.edu.ifgoiano.hotel.controller.dto.request;
 
+import br.edu.ifgoiano.hotel.model.Phone;
+import br.edu.ifgoiano.hotel.model.UserRole;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -9,19 +11,11 @@ import lombok.Setter;
 import java.util.Date;
 import java.util.List;
 
-@Entity
-@Table(name = "tb_user")
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
-//@XmlRootElement(name = "users")
-public class User {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "user_id")
-    private Long id;
-
+@AllArgsConstructor
+public class UserInputDTO {
     private String firstName;
 
     private String lastName;
@@ -34,9 +28,7 @@ public class User {
 
     private String password;
 
-    @Enumerated(EnumType.STRING)
     private UserRole role;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Phone> phones;
 }

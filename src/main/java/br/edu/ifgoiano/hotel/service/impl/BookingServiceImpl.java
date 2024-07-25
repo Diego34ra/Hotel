@@ -2,7 +2,6 @@ package br.edu.ifgoiano.hotel.service.impl;
 
 import br.edu.ifgoiano.hotel.controller.dto.mapper.MyModelMapper;
 import br.edu.ifgoiano.hotel.controller.dto.request.BookingOutputDTO;
-import br.edu.ifgoiano.hotel.controller.dto.request.UserOutputDTO;
 import br.edu.ifgoiano.hotel.controller.exception.ResourceBadRequestException;
 import br.edu.ifgoiano.hotel.controller.exception.ResourceNotFoundException;
 import br.edu.ifgoiano.hotel.model.*;
@@ -43,7 +42,7 @@ public class BookingServiceImpl implements BookingService {
     public BookingOutputDTO create(Booking booking) {
         User client = mapper.mapTo(userService.findById(booking.getClient().getId()), User.class);
 
-        Room room = mapper.mapObject(roomService.findById(booking.getRoom().getId()), Room.class);
+        Room room = mapper.mapTo(roomService.findById(booking.getRoom().getId()), Room.class);
 
         if(!room.getAvailable())
             throw new ResourceBadRequestException("O quarto não está disponível para reserva");

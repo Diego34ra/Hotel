@@ -1,4 +1,4 @@
-package br.edu.ifgoiano.hotel.controller.dto.request;
+package br.edu.ifgoiano.hotel.controller.dto.request.userDTOs;
 
 import br.edu.ifgoiano.hotel.model.Phone;
 import br.edu.ifgoiano.hotel.model.UserRole;

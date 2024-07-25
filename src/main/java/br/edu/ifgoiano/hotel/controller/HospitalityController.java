@@ -1,7 +1,6 @@
 package br.edu.ifgoiano.hotel.controller;
 
-import br.edu.ifgoiano.hotel.controller.dto.request.HospitalityDTO;
-import br.edu.ifgoiano.hotel.controller.dto.request.UserOutputDTO;
+
 import br.edu.ifgoiano.hotel.model.Hospitality;
 import br.edu.ifgoiano.hotel.service.HospitalityService;
 import io.swagger.v3.oas.annotations.Operation;

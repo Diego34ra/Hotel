@@ -1,8 +1,9 @@
 package br.edu.ifgoiano.hotel.service.impl;
 
 import br.edu.ifgoiano.hotel.controller.dto.mapper.MyModelMapper;
-import br.edu.ifgoiano.hotel.controller.dto.request.UserInputDTO;
-import br.edu.ifgoiano.hotel.controller.dto.request.UserOutputDTO;
+import br.edu.ifgoiano.hotel.controller.dto.request.userDTOs.UserInputDTO;
+import br.edu.ifgoiano.hotel.controller.dto.request.userDTOs.UserDetailOutputDTO;
+import br.edu.ifgoiano.hotel.controller.dto.request.userDTOs.UserSimpleOutputDTO;
 import br.edu.ifgoiano.hotel.controller.exception.ResourceNotFoundException;
 import br.edu.ifgoiano.hotel.model.User;
 import br.edu.ifgoiano.hotel.model.UserRole;
@@ -21,28 +22,28 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private MyModelMapper mapper;
     @Override
-    public UserOutputDTO create(UserInputDTO user) {
+    public UserDetailOutputDTO create(UserInputDTO user) {
         var userCreate = mapper.mapTo(user,User.class);
         if(userCreate.getRole() == null)
             userCreate.setRole(UserRole.getPadrao());
         userCreate.getPhones().forEach(phone -> phone.setUser(userCreate));
-        return mapper.mapTo(userRepository.save(userCreate), UserOutputDTO.class);
+        return mapper.mapTo(userRepository.save(userCreate), UserDetailOutputDTO.class);
     }
 
     @Override
-    public List<UserOutputDTO> findAll() {
-        return mapper.toList(userRepository.findAll(),UserOutputDTO.class);
+    public List<UserSimpleOutputDTO> findAll() {
+        return mapper.toList(userRepository.findAll(), UserSimpleOutputDTO.class);
     }
 
     @Override
-    public UserOutputDTO findById(Long id) {
+    public UserDetailOutputDTO findById(Long id) {
         var user = userRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Não foi encontrado nenhum cliente com esse Id."));
-        return mapper.mapTo(user,UserOutputDTO.class);
+        return mapper.mapTo(user,UserDetailOutputDTO.class);
     }
 
     @Override
-    public UserOutputDTO update(Long id, User userUpdate) {
+    public UserDetailOutputDTO update(Long id, User userUpdate) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Não foi encontrado nenhum cliente com esse Id."));
 
@@ -61,7 +62,7 @@ public class UserServiceImpl implements UserService {
             user.getPhones().forEach(phone -> phone.setUser(user));
         }
 
-        return mapper.mapTo(userRepository.save(user),UserOutputDTO.class);
+        return mapper.mapTo(userRepository.save(user),UserDetailOutputDTO.class);
     }
 
     @Override

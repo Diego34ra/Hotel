@@ -2,7 +2,6 @@ package br.edu.ifgoiano.hotel.controller;
 
 import br.edu.ifgoiano.hotel.controller.dto.mapper.MyModelMapper;
 import br.edu.ifgoiano.hotel.controller.dto.request.RoomOutputDTO;
-import br.edu.ifgoiano.hotel.controller.dto.request.UserOutputDTO;
 import br.edu.ifgoiano.hotel.controller.exception.ErrorDetails;
 import br.edu.ifgoiano.hotel.model.Room;
 import br.edu.ifgoiano.hotel.service.RoomService;

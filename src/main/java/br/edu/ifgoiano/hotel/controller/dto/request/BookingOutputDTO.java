@@ -1,6 +1,6 @@
 package br.edu.ifgoiano.hotel.controller.dto.request;
 
-import br.edu.ifgoiano.hotel.controller.dto.request.userDTOs.UserOutputDTO;
+import br.edu.ifgoiano.hotel.controller.dto.request.userDTOs.UserDetailOutputDTO;
 import br.edu.ifgoiano.hotel.model.*;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
@@ -25,6 +25,6 @@ public class BookingOutputDTO {
     private CheckIn checkIn;
     private CheckOut checkOut;
     private BookingStatus bookingStatus;
-    private UserOutputDTO client;
+    private UserDetailOutputDTO client;
     private RoomOutputDTO room;
 }

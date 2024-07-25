@@ -1,4 +1,4 @@
-create table tb_booking (days integer not null, total_value decimal(38,2), booking_id bigint not null auto_increment, check_in_date datetime(6), check_in_id bigint, check_out_date datetime(6), check_out_id bigint, room_id bigint, user_id bigint, booking_status enum ('CANCELED','CONFIRMED','FINISHED'), primary key (booking_id))  engine=InnoDB;
+create table tb_booking (days integer not null, total_value decimal(38,2), booking_id bigint not null auto_increment, check_in_date_planned datetime(6), check_in_id bigint, check_out_date_planned datetime(6), check_out_id bigint, room_id bigint, user_id bigint, booking_status enum ('CANCELED','CONFIRMED','FINISHED'), primary key (booking_id))  engine=InnoDB;
  create table tb_booking_hospitalities (booking_id bigint not null, hospitality_id bigint not null)  engine=InnoDB;
  create table tb_check_in (check_in_id bigint not null auto_increment, date datetime(6), user_id bigint, primary key (check_in_id))  engine=InnoDB;
  create table tb_check_out (check_in_id bigint not null auto_increment, date datetime(6), user_id bigint, primary key (check_in_id))  engine=InnoDB;

@@ -33,13 +33,14 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User findById(Long id) {
-        return userRepository.findById(id)
+    public UserOutputDTO findById(Long id) {
+        var user = userRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Não foi encontrado nenhum cliente com esse Id."));
+        return mapper.mapTo(user,UserOutputDTO.class);
     }
 
     @Override
-    public User update(Long id, User userUpdate) {
+    public UserOutputDTO update(Long id, User userUpdate) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Não foi encontrado nenhum cliente com esse Id."));
 
@@ -58,7 +59,7 @@ public class UserServiceImpl implements UserService {
             user.getPhones().forEach(phone -> phone.setUser(user));
         }
 
-        return userRepository.save(user);
+        return mapper.mapTo(userRepository.save(user),UserOutputDTO.class);
     }
 
     @Override

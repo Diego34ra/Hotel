@@ -6,9 +6,9 @@ import br.edu.ifgoiano.hotel.model.Room;
 import java.util.List;
 
 public interface RoomService {
-    Room create(Room quarto);
+    RoomOutputDTO create(Room quarto);
     List<RoomOutputDTO> findAll();
     RoomOutputDTO findById(Long id);
-    Room update(Long id,Room room);
+    RoomOutputDTO update(Long id,Room room);
     void delete(Long id);
 }

@@ -38,7 +38,5 @@ public class User {
     private UserRole role;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-//    @JacksonXmlElementWrapper(localName = "phones")
-//    @JacksonXmlProperty(localName = "phone")
     private List<Phone> phones;
 }

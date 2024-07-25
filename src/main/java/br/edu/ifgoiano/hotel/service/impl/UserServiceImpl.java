@@ -1,5 +1,9 @@
 package br.edu.ifgoiano.hotel.service.impl;
 
+import br.edu.ifgoiano.hotel.controller.dto.mapper.MyModelMapper;
+import br.edu.ifgoiano.hotel.controller.dto.request.userDTOs.UserInputDTO;
+import br.edu.ifgoiano.hotel.controller.dto.request.userDTOs.UserDetailOutputDTO;
+import br.edu.ifgoiano.hotel.controller.dto.request.userDTOs.UserSimpleOutputDTO;
 import br.edu.ifgoiano.hotel.controller.exception.ResourceNotFoundException;
 import br.edu.ifgoiano.hotel.model.User;
 import br.edu.ifgoiano.hotel.model.UserRole;
@@ -14,27 +18,32 @@ import java.util.List;
 public class UserServiceImpl implements UserService {
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private MyModelMapper mapper;
     @Override
-    public User create(User user) {
-        if(user.getRole() == null)
-            user.setRole(UserRole.getPadrao());
-        user.getPhones().forEach(phone -> phone.setUser(user));
-        return userRepository.save(user);
+    public UserDetailOutputDTO create(UserInputDTO user) {
+        var userCreate = mapper.mapTo(user,User.class);
+        if(userCreate.getRole() == null)
+            userCreate.setRole(UserRole.getPadrao());
+        userCreate.getPhones().forEach(phone -> phone.setUser(userCreate));
+        return mapper.mapTo(userRepository.save(userCreate), UserDetailOutputDTO.class);
     }
 
     @Override
-    public List<User> findAll() {
-        return userRepository.findAll();
+    public List<UserSimpleOutputDTO> findAll() {
+        return mapper.toList(userRepository.findAll(), UserSimpleOutputDTO.class);
     }
 
     @Override
-    public User findById(Long id) {
-        return userRepository.findById(id)
+    public UserDetailOutputDTO findById(Long id) {
+        var user = userRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Não foi encontrado nenhum cliente com esse Id."));
+        return mapper.mapTo(user,UserDetailOutputDTO.class);
     }
 
     @Override
-    public User update(Long id, User userUpdate) {
+    public UserDetailOutputDTO update(Long id, User userUpdate) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Não foi encontrado nenhum cliente com esse Id."));
 
@@ -53,7 +62,7 @@ public class UserServiceImpl implements UserService {
             user.getPhones().forEach(phone -> phone.setUser(user));
         }
 
-        return userRepository.save(user);
+        return mapper.mapTo(userRepository.save(user),UserDetailOutputDTO.class);
     }
 
     @Override

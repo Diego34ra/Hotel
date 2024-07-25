@@ -1,12 +1,13 @@
 package br.edu.ifgoiano.hotel.service;
 
+import br.edu.ifgoiano.hotel.controller.dto.request.BookingOutputDTO;
 import br.edu.ifgoiano.hotel.model.Booking;
 
 import java.util.List;
 
 public interface BookingService {
 
-    Booking create(Booking booking);
+    BookingOutputDTO create(Booking booking);
 
     Booking addhospitality(Long bookingId, List<Long> hospitalityId);
 

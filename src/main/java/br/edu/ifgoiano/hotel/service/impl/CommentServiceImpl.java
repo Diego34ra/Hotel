@@ -5,6 +5,7 @@ import br.edu.ifgoiano.hotel.controller.dto.request.CommentOutputDTO;
 import br.edu.ifgoiano.hotel.controller.exception.ResourceNotFoundException;
 import br.edu.ifgoiano.hotel.model.Comment;
 import br.edu.ifgoiano.hotel.model.Room;
+import br.edu.ifgoiano.hotel.model.User;
 import br.edu.ifgoiano.hotel.repository.BookingRepository;
 import br.edu.ifgoiano.hotel.repository.CommentRepository;
 import br.edu.ifgoiano.hotel.service.CommentService;
@@ -36,7 +37,7 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public CommentOutputDTO create(Comment comment) {
-        comment.setClient(userService.findById(comment.getClient().getId()));
+        comment.setClient(mapper.mapTo(userService.findById(comment.getClient().getId()), User.class));
         comment.setRoom(mapper.mapTo(roomService.findById(comment.getRoom().getId()), Room.class));
         comment.setDate(LocalDateTime.now());
 

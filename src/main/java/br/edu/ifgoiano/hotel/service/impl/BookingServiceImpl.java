@@ -1,6 +1,8 @@
 package br.edu.ifgoiano.hotel.service.impl;
 
 import br.edu.ifgoiano.hotel.controller.dto.mapper.MyModelMapper;
+import br.edu.ifgoiano.hotel.controller.dto.request.BookingOutputDTO;
+import br.edu.ifgoiano.hotel.controller.dto.request.UserOutputDTO;
 import br.edu.ifgoiano.hotel.controller.exception.ResourceBadRequestException;
 import br.edu.ifgoiano.hotel.controller.exception.ResourceNotFoundException;
 import br.edu.ifgoiano.hotel.model.*;
@@ -38,8 +40,8 @@ public class BookingServiceImpl implements BookingService {
     private MyModelMapper mapper;
 
     @Override
-    public Booking create(Booking booking) {
-        User client = userService.findById(booking.getClient().getId());
+    public BookingOutputDTO create(Booking booking) {
+        User client = mapper.mapTo(userService.findById(booking.getClient().getId()), User.class);
 
         Room room = mapper.mapTo(roomService.findById(booking.getRoom().getId()), Room.class);
 
@@ -51,7 +53,7 @@ public class BookingServiceImpl implements BookingService {
         booking.setRoom(room);
         booking.setTotalValue(booking.getSumTotalValue(room.getPrice()));
         booking.setBookingStatus(BookingStatus.getPadrao());
-        return bookingRepository.save(booking);
+        return mapper.mapTo(bookingRepository.save(booking),BookingOutputDTO.class);
     }
 
     @Override
@@ -76,7 +78,7 @@ public class BookingServiceImpl implements BookingService {
         Booking booking = bookingRepository.findById(bookingId)
                 .orElseThrow(() -> new ResourceNotFoundException("Não foi encontrado nenhuma reserva com esse id."));
 
-        User employee = userService.findById(empolyeeId);
+        User employee = mapper.mapTo(userService.findById(empolyeeId), User.class);
 
         if(booking.getBookingStatus() == BookingStatus.CANCELED)
             throw new ResourceBadRequestException("Não é possível fazer checkIn de reserva cancelada.");
@@ -96,7 +98,7 @@ public class BookingServiceImpl implements BookingService {
         Booking booking = bookingRepository.findById(bookingId)
                 .orElseThrow(() -> new ResourceNotFoundException("Não foi encontrado nenhuma reserva com esse id."));
 
-        User employee = userService.findById(empolyeeId);
+        User employee = mapper.mapTo(userService.findById(empolyeeId), User.class);
 
         if(booking.getBookingStatus() == BookingStatus.CANCELED)
             throw new ResourceBadRequestException("Não é possível fazer checkOut de reserva cancelada.");

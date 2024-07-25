@@ -1,5 +1,6 @@
 package br.edu.ifgoiano.hotel.controller;
 
+import br.edu.ifgoiano.hotel.controller.dto.request.BookingOutputDTO;
 import br.edu.ifgoiano.hotel.controller.dto.request.HospitalityDTO;
 import br.edu.ifgoiano.hotel.model.Booking;
 import br.edu.ifgoiano.hotel.service.BookingService;
@@ -18,7 +19,7 @@ public class BookingController {
     private BookingService bookingService;
 
     @PostMapping
-    public ResponseEntity<Booking> create(@RequestBody Booking booking){
+    public ResponseEntity<BookingOutputDTO> create(@RequestBody Booking booking){
         var bookingCreated = bookingService.create(booking);
         return ResponseEntity.status(HttpStatus.CREATED).body(bookingCreated);
     }

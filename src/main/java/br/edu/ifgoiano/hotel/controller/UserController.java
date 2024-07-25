@@ -1,6 +1,7 @@
 package br.edu.ifgoiano.hotel.controller;
 
 import br.edu.ifgoiano.hotel.controller.dto.request.UserOutputDTO;
+import br.edu.ifgoiano.hotel.controller.exception.ErrorDetails;
 import br.edu.ifgoiano.hotel.model.User;
 import br.edu.ifgoiano.hotel.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -51,16 +52,30 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<User> findById(@PathVariable Long id){
+    @Operation(summary = "Busca um usuário pelo id")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Usuário encontrado com sucesso.",content = { @Content(mediaType = "application/json", schema = @Schema(implementation = UserOutputDTO.class))}),
+            @ApiResponse(responseCode = "404", description = "Usuário não encontrado.",content = { @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorDetails.class))})
+    })
+    public ResponseEntity<UserOutputDTO> findById(@PathVariable Long id){
         return ResponseEntity.status(HttpStatus.OK).body(userService.findById(id));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<User> update(@PathVariable Long id, @RequestBody User user){
+    @Operation(summary = "Atualizar um usuário")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Usuário atualizado com sucesso.",content = { @Content(mediaType = "application/json", schema = @Schema(implementation = UserOutputDTO.class))}),
+            @ApiResponse(responseCode = "404", description = "Usário não encontrado.",content = { @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorDetails.class))})
+    })
+    public ResponseEntity<UserOutputDTO> update(@PathVariable Long id, @RequestBody User user){
         return ResponseEntity.status(HttpStatus.OK).body(userService.update(id,user));
     }
 
     @DeleteMapping("/{id}")
+    @Operation(summary = "Deletar um usuário")
+    @ApiResponses({
+            @ApiResponse(responseCode = "204", description = "Usuário deletado com sucesso.")
+    })
     public ResponseEntity<?> delete(@PathVariable Long id){
         userService.delete(id);
         return ResponseEntity.noContent().build();

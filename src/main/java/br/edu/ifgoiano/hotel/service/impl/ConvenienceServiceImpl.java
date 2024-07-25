@@ -38,8 +38,9 @@ public class ConvenienceServiceImpl implements ConvenienceService {
 
     @Override
     public void delete(Long id) {
-        Convenience convenience = convenienceRepository.findById(id).
-                orElseThrow(() -> new ResourceNotFoundException("Não foi encontrada nenhuma comodidade com o id informado."));
-        convenienceRepository.delete(convenience);
+        //métodos idempotentes.
+        //Convenience convenience = convenienceRepository.findById(id).
+        //        orElseThrow(() -> new ResourceNotFoundException("Não foi encontrada nenhuma comodidade com o id informado."));
+        convenienceRepository.deleteById(id);
     }
 }

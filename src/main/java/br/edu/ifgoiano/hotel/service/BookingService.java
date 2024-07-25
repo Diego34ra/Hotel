@@ -1,6 +1,7 @@
 package br.edu.ifgoiano.hotel.service;
 
 import br.edu.ifgoiano.hotel.controller.dto.request.BookingOutputDTO;
+import br.edu.ifgoiano.hotel.controller.dto.request.BookingSimpleOutputDTO;
 import br.edu.ifgoiano.hotel.model.Booking;
 
 import java.util.List;
@@ -15,7 +16,7 @@ public interface BookingService {
 
     Booking checkOut(Long bookingId, Long empolyeeId);
 
-    List<Booking> findAll();
+    List<BookingSimpleOutputDTO> findAll();
 
     Booking cancel(Long id);
 

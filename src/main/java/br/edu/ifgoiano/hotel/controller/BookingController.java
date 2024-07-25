@@ -1,6 +1,7 @@
 package br.edu.ifgoiano.hotel.controller;
 
 import br.edu.ifgoiano.hotel.controller.dto.request.BookingOutputDTO;
+import br.edu.ifgoiano.hotel.controller.dto.request.BookingSimpleOutputDTO;
 import br.edu.ifgoiano.hotel.controller.dto.request.HospitalityDTO;
 import br.edu.ifgoiano.hotel.model.Booking;
 import br.edu.ifgoiano.hotel.service.BookingService;
@@ -49,14 +50,14 @@ public class BookingController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Booking>> findAll(){
+    public ResponseEntity<List<BookingSimpleOutputDTO>> findAll(){
         var bookings = bookingService.findAll();
         return ResponseEntity.status(HttpStatus.OK).body(bookings);
     }
 
     @DeleteMapping("{id}")
-    public ResponseEntity<?> delete(@PathVariable Long id){
+    public ResponseEntity delete(@PathVariable Long id){
         bookingService.delete(id);
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        return ResponseEntity.noContent().build();
     }
 }

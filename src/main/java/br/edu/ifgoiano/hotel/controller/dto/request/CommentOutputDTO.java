@@ -8,10 +8,11 @@ import lombok.Setter;
 
 import java.time.LocalDateTime;
 
-@AllArgsConstructor
-@NoArgsConstructor
+
 @Getter
 @Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class CommentOutputDTO {
 
     private Long id;
@@ -22,6 +23,6 @@ public class CommentOutputDTO {
 
     private UserOutputDTO client;
 
-    @JsonBackReference // Define o lado filho da relação
-    private RoomOutputDTO room;
+//    @JsonBackReference // Define o lado filho da relação
+//    private RoomOutputDTO room;
 }

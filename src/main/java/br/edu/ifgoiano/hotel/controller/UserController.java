@@ -1,5 +1,6 @@
 package br.edu.ifgoiano.hotel.controller;
 
+import br.edu.ifgoiano.hotel.controller.dto.request.UserInputDTO;
 import br.edu.ifgoiano.hotel.controller.dto.request.UserOutputDTO;
 import br.edu.ifgoiano.hotel.controller.exception.ErrorDetails;
 import br.edu.ifgoiano.hotel.model.User;
@@ -20,7 +21,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("api/v1/hotel/user")
+@RequestMapping("api/v1/hotel/users")
 public class UserController {
 
     @Autowired
@@ -30,7 +31,7 @@ public class UserController {
     @ApiResponses({
             @ApiResponse(responseCode = "201", description = "Usuário criado com sucesso.",content = { @Content(mediaType = "application/json", schema = @Schema(implementation = UserOutputDTO.class))})
     })
-    public ResponseEntity<UserOutputDTO> create(@RequestBody User user){
+    public ResponseEntity<UserOutputDTO> create(@RequestBody UserInputDTO user){
         var response = userService.create(user);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
@@ -47,7 +48,7 @@ public class UserController {
                     )
             )
     })
-    public ResponseEntity<List<User>> findAll(){
+    public ResponseEntity<List<UserOutputDTO>> findAll(){
         return ResponseEntity.status(HttpStatus.OK).body(userService.findAll());
     }
 
@@ -65,7 +66,7 @@ public class UserController {
     @Operation(summary = "Atualizar um usuário")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Usuário atualizado com sucesso.",content = { @Content(mediaType = "application/json", schema = @Schema(implementation = UserOutputDTO.class))}),
-            @ApiResponse(responseCode = "404", description = "Usário não encontrado.",content = { @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorDetails.class))})
+            @ApiResponse(responseCode = "404", description = "Usuário não encontrado.",content = { @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorDetails.class))})
     })
     public ResponseEntity<UserOutputDTO> update(@PathVariable Long id, @RequestBody User user){
         return ResponseEntity.status(HttpStatus.OK).body(userService.update(id,user));

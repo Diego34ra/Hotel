@@ -1,5 +1,7 @@
 package br.edu.ifgoiano.hotel.controller.dto.request;
 
+import br.edu.ifgoiano.hotel.controller.dto.request.userDTOs.UserDetailOutputDTO;
+import br.edu.ifgoiano.hotel.controller.dto.request.userDTOs.UserSimpleOutputDTO;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -21,7 +23,7 @@ public class CommentOutputDTO {
 
     private LocalDateTime date;
 
-    private UserOutputDTO client;
+    private UserSimpleOutputDTO client;
 
 //    @JsonBackReference // Define o lado filho da relação
 //    private RoomOutputDTO room;

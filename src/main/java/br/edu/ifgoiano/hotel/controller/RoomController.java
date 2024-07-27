@@ -1,8 +1,9 @@
 package br.edu.ifgoiano.hotel.controller;
 
 import br.edu.ifgoiano.hotel.controller.dto.mapper.MyModelMapper;
+import br.edu.ifgoiano.hotel.controller.dto.request.RoomNoCommentOutputDTO;
 import br.edu.ifgoiano.hotel.controller.dto.request.RoomOutputDTO;
-import br.edu.ifgoiano.hotel.controller.dto.request.UserOutputDTO;
+import br.edu.ifgoiano.hotel.controller.dto.request.RoomSimpleOutputDTO;
 import br.edu.ifgoiano.hotel.controller.exception.ErrorDetails;
 import br.edu.ifgoiano.hotel.model.Room;
 import br.edu.ifgoiano.hotel.service.RoomService;
@@ -51,8 +52,8 @@ public class RoomController {
                     )
             )
     })
-    public ResponseEntity<List<RoomOutputDTO>> findAll(){
-        List<RoomOutputDTO> rooms = roomService.findAll();
+    public ResponseEntity<List<RoomNoCommentOutputDTO>> findAll(){
+        List<RoomNoCommentOutputDTO> rooms = roomService.findAll();
         return ResponseEntity.status(HttpStatus.OK).body(rooms);
     }
 

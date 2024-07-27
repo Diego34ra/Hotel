@@ -1,20 +1,21 @@
 package br.edu.ifgoiano.hotel.controller;
 
-import br.edu.ifgoiano.hotel.controller.dto.request.UserInputDTO;
-import br.edu.ifgoiano.hotel.controller.dto.request.UserOutputDTO;
+
+import br.edu.ifgoiano.hotel.controller.dto.request.userDTOs.UserInputDTO;
 import br.edu.ifgoiano.hotel.controller.exception.ErrorDetails;
+import br.edu.ifgoiano.hotel.controller.dto.request.userDTOs.UserDetailOutputDTO;
+import br.edu.ifgoiano.hotel.controller.dto.mapper.MyModelMapper;
+import br.edu.ifgoiano.hotel.controller.dto.request.userDTOs.UserSimpleOutputDTO;
 import br.edu.ifgoiano.hotel.model.User;
 import br.edu.ifgoiano.hotel.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,14 +27,17 @@ public class UserController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private MyModelMapper modelMapper;
+
     @PostMapping
     @Operation(summary = "Criar um usuário")
     @ApiResponses({
-            @ApiResponse(responseCode = "201", description = "Usuário criado com sucesso.",content = { @Content(mediaType = "application/json", schema = @Schema(implementation = UserOutputDTO.class))})
+            @ApiResponse(responseCode = "201", description = "Usuário criado com sucesso.",content = { @Content(mediaType = "application/json", schema = @Schema(implementation = UserDetailOutputDTO.class))})
     })
-    public ResponseEntity<UserOutputDTO> create(@RequestBody UserInputDTO user){
-        var response = userService.create(user);
-        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+    public ResponseEntity<UserDetailOutputDTO> create(@RequestBody UserInputDTO user){
+        return ResponseEntity.status(HttpStatus.CREATED).body(userService.create(user));
     }
 
     @GetMapping
@@ -44,32 +48,35 @@ public class UserController {
                     description = "Usuários buscados com sucesso.",
                     content = @Content(
                             mediaType = "application/json",
-                            array = @ArraySchema(schema = @Schema(implementation = UserOutputDTO.class))
+                            array = @ArraySchema(schema = @Schema(implementation = UserSimpleOutputDTO.class))
                     )
             )
     })
-    public ResponseEntity<List<UserOutputDTO>> findAll(){
-        return ResponseEntity.status(HttpStatus.OK).body(userService.findAll());
+    public ResponseEntity<List<UserSimpleOutputDTO>> findAll(){
+        List<UserSimpleOutputDTO> userOutputList = modelMapper.toList(userService.findAll(), UserSimpleOutputDTO.class);
+        return ResponseEntity.status(HttpStatus.OK).body(userOutputList);
     }
 
     @GetMapping("/{id}")
     @Operation(summary = "Busca um usuário pelo id")
     @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "Usuário encontrado com sucesso.",content = { @Content(mediaType = "application/json", schema = @Schema(implementation = UserOutputDTO.class))}),
+            @ApiResponse(responseCode = "200", description = "Usuário encontrado com sucesso.",content = { @Content(mediaType = "application/json", schema = @Schema(implementation = UserDetailOutputDTO.class))}),
             @ApiResponse(responseCode = "404", description = "Usuário não encontrado.",content = { @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorDetails.class))})
     })
-    public ResponseEntity<UserOutputDTO> findById(@PathVariable Long id){
-        return ResponseEntity.status(HttpStatus.OK).body(userService.findById(id));
+    public ResponseEntity<UserDetailOutputDTO> findById(@PathVariable Long id){
+        UserDetailOutputDTO userOutput = modelMapper.mapTo(userService.findById(id), UserDetailOutputDTO.class);
+        return ResponseEntity.status(HttpStatus.OK).body(userOutput);
     }
 
     @PutMapping("/{id}")
     @Operation(summary = "Atualizar um usuário")
     @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "Usuário atualizado com sucesso.",content = { @Content(mediaType = "application/json", schema = @Schema(implementation = UserOutputDTO.class))}),
+            @ApiResponse(responseCode = "200", description = "Usuário atualizado com sucesso.",content = { @Content(mediaType = "application/json", schema = @Schema(implementation = UserDetailOutputDTO.class))}),
             @ApiResponse(responseCode = "404", description = "Usuário não encontrado.",content = { @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorDetails.class))})
     })
-    public ResponseEntity<UserOutputDTO> update(@PathVariable Long id, @RequestBody User user){
-        return ResponseEntity.status(HttpStatus.OK).body(userService.update(id,user));
+    public ResponseEntity<UserDetailOutputDTO> update(@PathVariable Long id, @RequestBody User user){
+        UserDetailOutputDTO userOutput = modelMapper.mapTo(userService.update(id,user), UserDetailOutputDTO.class);
+        return ResponseEntity.status(HttpStatus.OK).body(userOutput);
     }
 
     @DeleteMapping("/{id}")

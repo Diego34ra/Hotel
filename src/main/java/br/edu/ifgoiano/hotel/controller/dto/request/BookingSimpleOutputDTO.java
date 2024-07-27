@@ -1,7 +1,10 @@
 package br.edu.ifgoiano.hotel.controller.dto.request;
 
 import br.edu.ifgoiano.hotel.controller.dto.request.userDTOs.UserDetailOutputDTO;
-import br.edu.ifgoiano.hotel.model.*;
+import br.edu.ifgoiano.hotel.controller.dto.request.userDTOs.UserSimpleOutputDTO;
+import br.edu.ifgoiano.hotel.model.BookingStatus;
+import br.edu.ifgoiano.hotel.model.CheckIn;
+import br.edu.ifgoiano.hotel.model.CheckOut;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -16,15 +19,13 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class BookingOutputDTO {
+public class BookingSimpleOutputDTO {
     private Long id;
     private int days;
     private Date checkInDatePlanned;
     private Date checkOutDatePlanned;
     private BigDecimal totalValue;
-    private CheckIn checkIn;
-    private CheckOut checkOut;
     private BookingStatus bookingStatus;
-    private UserDetailOutputDTO client;
-    private RoomOutputDTO room;
+    private UserSimpleOutputDTO client;
+    private RoomSimpleOutputDTO room;
 }

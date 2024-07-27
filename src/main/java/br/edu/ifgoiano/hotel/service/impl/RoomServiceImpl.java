@@ -1,6 +1,7 @@
 package br.edu.ifgoiano.hotel.service.impl;
 
 import br.edu.ifgoiano.hotel.controller.dto.mapper.MyModelMapper;
+import br.edu.ifgoiano.hotel.controller.dto.request.RoomInputDTO;
 import br.edu.ifgoiano.hotel.controller.dto.request.RoomNoCommentOutputDTO;
 import br.edu.ifgoiano.hotel.controller.dto.request.RoomOutputDTO;
 import br.edu.ifgoiano.hotel.controller.exception.ResourceNotFoundException;
@@ -21,8 +22,9 @@ public class RoomServiceImpl implements RoomService {
     @Autowired
     private MyModelMapper mapper;
     @Override
-    public RoomOutputDTO create(Room room) {
-        return mapper.mapTo(roomRepository.save(room),RoomOutputDTO.class);
+    public RoomOutputDTO create(RoomInputDTO room) {
+        var roomCreate = mapper.mapTo(room,Room.class);
+        return mapper.mapTo(roomCreate,RoomOutputDTO.class);
     }
 
     @Override

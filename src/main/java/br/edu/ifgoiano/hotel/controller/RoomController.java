@@ -1,6 +1,7 @@
 package br.edu.ifgoiano.hotel.controller;
 
 import br.edu.ifgoiano.hotel.controller.dto.mapper.MyModelMapper;
+import br.edu.ifgoiano.hotel.controller.dto.request.RoomInputDTO;
 import br.edu.ifgoiano.hotel.controller.dto.request.RoomNoCommentOutputDTO;
 import br.edu.ifgoiano.hotel.controller.dto.request.RoomOutputDTO;
 import br.edu.ifgoiano.hotel.controller.dto.request.RoomSimpleOutputDTO;
@@ -35,7 +36,7 @@ public class RoomController {
     @ApiResponses({
             @ApiResponse(responseCode = "201", description = "Quarto criado com sucesso.",content = { @Content(mediaType = "application/json", schema = @Schema(implementation = RoomOutputDTO.class))})
     })
-    public ResponseEntity<RoomOutputDTO> create(@RequestBody Room room){
+    public ResponseEntity<RoomOutputDTO> create(@RequestBody RoomInputDTO room){
         var roomCreated = roomService.create(room);
         return ResponseEntity.status(HttpStatus.CREATED).body(roomCreated);
     }

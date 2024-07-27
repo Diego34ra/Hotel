@@ -10,12 +10,16 @@ import br.edu.ifgoiano.hotel.model.UserRole;
 import br.edu.ifgoiano.hotel.repository.UserRepository;
 import br.edu.ifgoiano.hotel.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-public class UserServiceImpl implements UserService {
+public class UserServiceImpl implements UserService, UserDetailsService {
     @Autowired
     private UserRepository userRepository;
 
@@ -26,6 +30,9 @@ public class UserServiceImpl implements UserService {
         var userCreate = mapper.mapTo(user,User.class);
         if(userCreate.getRole() == null)
             userCreate.setRole(UserRole.getPadrao());
+
+        String encryptedPassword = new BCryptPasswordEncoder().encode(user.getPassword());
+        userCreate.setPassword(encryptedPassword);
         userCreate.getPhones().forEach(phone -> phone.setUser(userCreate));
         return mapper.mapTo(userRepository.save(userCreate), UserDetailOutputDTO.class);
     }
@@ -40,6 +47,11 @@ public class UserServiceImpl implements UserService {
         var user = userRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Não foi encontrado nenhum cliente com esse Id."));
         return mapper.mapTo(user,UserDetailOutputDTO.class);
+    }
+
+    @Override
+    public UserDetails findByEmail(String email) {
+        return userRepository.findByEmail(email);
     }
 
     @Override
@@ -67,9 +79,11 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void delete(Long id) {
-        //Métodos idempotentes!
-        //var usuarioDelete = userRepository.findById(id)
-        //        .orElseThrow(() -> new ResourceNotFoundException("Não foi encontrado nenhum cliente com esse Id."));
         userRepository.deleteById(id);
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        return userRepository.findByEmail(username);
     }
 }

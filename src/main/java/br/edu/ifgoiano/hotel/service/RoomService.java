@@ -1,5 +1,6 @@
 package br.edu.ifgoiano.hotel.service;
 
+import br.edu.ifgoiano.hotel.controller.dto.request.RoomInputDTO;
 import br.edu.ifgoiano.hotel.controller.dto.request.RoomNoCommentOutputDTO;
 import br.edu.ifgoiano.hotel.controller.dto.request.RoomOutputDTO;
 import br.edu.ifgoiano.hotel.model.Room;
@@ -7,7 +8,7 @@ import br.edu.ifgoiano.hotel.model.Room;
 import java.util.List;
 
 public interface RoomService {
-    RoomOutputDTO create(Room quarto);
+    RoomOutputDTO create(RoomInputDTO quarto);
     List<RoomNoCommentOutputDTO> findAll();
     RoomOutputDTO findById(Long id);
     RoomOutputDTO update(Long id,Room room);

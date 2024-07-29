@@ -1,6 +1,8 @@
 package br.edu.ifgoiano.hotel.controller.exception;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.databind.util.StdDateFormat;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -10,6 +12,7 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint {
@@ -21,17 +24,22 @@ public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint 
     @Override
     public void commence(HttpServletRequest req, HttpServletResponse res, AuthenticationException authException) throws IOException, ServletException {
         res.setContentType("application/json; charset=UTF-8");
-        res.setStatus(403);
+        res.setStatus(401);
 
-        HttpStatus status = HttpStatus.FORBIDDEN;
+        HttpStatus status = HttpStatus.UNAUTHORIZED;
 
         ObjectMapper mapper = new ObjectMapper();
-        ErrorDetails errorDetails = new ErrorDetails(new Date(),status.value(),"Acesso negado.",getRequestPath());
-        res.getWriter().write(mapper.writeValueAsString(errorDetails)
-        );
+        mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+        mapper.setDateFormat(new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'"));
+        ErrorDetails errorDetails = new ErrorDetails(new Date(),status.value(),"Acesso negado.",getRequestPath(req));
+        res.getWriter().write(mapper.writeValueAsString(errorDetails));
     }
 
-    private String getRequestPath() {
+    private String getRequestPath(HttpServletRequest request) {
+        String forwardUri = (String) request.getAttribute("jakarta.servlet.forward.request_uri");
+        if (forwardUri != null) {
+            return forwardUri;
+        }
         return request.getRequestURI();
     }
 }

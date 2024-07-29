@@ -4,6 +4,7 @@ import br.edu.ifgoiano.hotel.controller.dto.mapper.MyModelMapper;
 import br.edu.ifgoiano.hotel.controller.dto.request.userDTOs.UserInputDTO;
 import br.edu.ifgoiano.hotel.controller.dto.request.userDTOs.UserDetailOutputDTO;
 import br.edu.ifgoiano.hotel.controller.dto.request.userDTOs.UserSimpleOutputDTO;
+import br.edu.ifgoiano.hotel.controller.exception.ResourceBadRequestException;
 import br.edu.ifgoiano.hotel.controller.exception.ResourceNotFoundException;
 import br.edu.ifgoiano.hotel.model.User;
 import br.edu.ifgoiano.hotel.model.UserRole;
@@ -28,8 +29,17 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Override
     public UserDetailOutputDTO create(UserInputDTO user) {
         var userCreate = mapper.mapTo(user,User.class);
+
         if(userCreate.getRole() == null)
             userCreate.setRole(UserRole.getPadrao());
+
+        if (emailExists(user.getEmail()))
+            throw new ResourceBadRequestException("Esse email já está cadastrado");
+
+
+        if (cpfExists(user.getCpf()))
+            throw new ResourceBadRequestException("Esse cpf já está cadastrado");
+
 
         String encryptedPassword = new BCryptPasswordEncoder().encode(user.getPassword());
         userCreate.setPassword(encryptedPassword);
@@ -80,6 +90,16 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Override
     public void delete(Long id) {
         userRepository.deleteById(id);
+    }
+
+    @Override
+    public boolean emailExists(String email) {
+        return userRepository.existsByEmail(email);
+    }
+
+    @Override
+    public boolean cpfExists(String cpf) {
+        return userRepository.existsByCpf(cpf);
     }
 
     @Override

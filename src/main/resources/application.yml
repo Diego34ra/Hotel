@@ -23,3 +23,9 @@ api:
       secret: ${JWT_SECRET:my-secret-key}
     refresh-token:
       expiration: 8
+file:
+  upload-dir: /uploads
+springdoc:
+  swagger-ui:
+    tags-sorter: method
+    operations-sorter: alpha

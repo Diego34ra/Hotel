@@ -11,10 +11,15 @@ import java.util.List;
 public interface UserService {
     UserDetailOutputDTO create(UserInputDTO user);
     List<UserSimpleOutputDTO> findAll();
+
     UserDetailOutputDTO findById(Long id);
 
     UserDetails findByEmail(String email);
 
     UserDetailOutputDTO update(Long id, User user);
     void delete(Long id);
+
+    boolean emailExists(String email);
+
+    boolean cpfExists(String cpf);
 }

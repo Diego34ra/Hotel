@@ -2,6 +2,7 @@ package br.edu.ifgoiano.hotel.security;
 
 import br.edu.ifgoiano.hotel.controller.dto.request.LoginResponseDTO;
 import br.edu.ifgoiano.hotel.controller.dto.request.RefreshTokenDTO;
+import br.edu.ifgoiano.hotel.controller.exception.ResourceBadRequestException;
 import br.edu.ifgoiano.hotel.model.User;
 import br.edu.ifgoiano.hotel.service.UserService;
 import com.auth0.jwt.JWT;
@@ -43,6 +44,9 @@ public class TokenService {
     public LoginResponseDTO getRefreshToken(RefreshTokenDTO refreshTokenDTO){
         var login = validateToken(refreshTokenDTO.refreshToken());
         UserDetails user = userService.findByEmail(login);
+
+        if(user == null)
+            throw new ResourceBadRequestException("Refresh token inválido.");
 
         var authentication = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(authentication);

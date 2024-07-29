@@ -14,7 +14,10 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -23,6 +26,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("api/v1/hotel/users")
+@Order(1)
 public class UserController {
 
     @Autowired
@@ -32,15 +36,17 @@ public class UserController {
     private MyModelMapper modelMapper;
 
     @PostMapping
+    @Order(1)
     @Operation(summary = "Criar um usuário")
     @ApiResponses({
             @ApiResponse(responseCode = "201", description = "Usuário criado com sucesso.",content = { @Content(mediaType = "application/json", schema = @Schema(implementation = UserDetailOutputDTO.class))})
     })
-    public ResponseEntity<UserDetailOutputDTO> create(@RequestBody UserInputDTO user){
+    public ResponseEntity<UserDetailOutputDTO> create(@RequestBody @Valid UserInputDTO user){
         return ResponseEntity.status(HttpStatus.CREATED).body(userService.create(user));
     }
 
     @GetMapping
+    @Order(2)
     @Operation(summary = "Buscar todos os usuários")
     @ApiResponses({
             @ApiResponse(
@@ -58,6 +64,7 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
+    @Order(3)
     @Operation(summary = "Busca um usuário pelo id")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Usuário encontrado com sucesso.",content = { @Content(mediaType = "application/json", schema = @Schema(implementation = UserDetailOutputDTO.class))}),

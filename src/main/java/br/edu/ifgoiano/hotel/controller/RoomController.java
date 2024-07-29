@@ -41,7 +41,6 @@ public class RoomController {
 
     @PostMapping
     @Operation(summary = "Criar um quarto")
-    @Api
     @ApiResponses({
             @ApiResponse(responseCode = "201", description = "Quarto criado com sucesso.",content = { @Content(mediaType = "application/json", schema = @Schema(implementation = RoomOutputDTO.class))})
     })

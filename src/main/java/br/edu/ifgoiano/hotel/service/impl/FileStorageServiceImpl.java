@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -24,10 +25,17 @@ public class FileStorageServiceImpl implements FileStorageService {
 
     @Value("${file.upload-dir}")
     private String uploadDir;
+
+    public String getAbsolutePath() {
+        String userDir = System.getProperty("user.dir");
+        Path srcPath = Paths.get(userDir);
+        return srcPath.toAbsolutePath().toString();
+    }
+
     @Override
     public MessageResponseDTO saveFile(Long roomId, MultipartFile file) {
         try {
-            Path uploadPath = Paths.get(uploadDir, roomId.toString());
+            Path uploadPath = Paths.get(getAbsolutePath() + uploadDir, roomId.toString());
             Files.createDirectories(uploadPath);
             Path filePath = uploadPath.resolve(Objects.requireNonNull(file.getOriginalFilename()));
             Files.copy(file.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
@@ -45,7 +53,7 @@ public class FileStorageServiceImpl implements FileStorageService {
     @Override
     public FileResponse downloadFile(Long roomId, String filename) {
         try {
-            Path file = Paths.get(uploadDir).resolve(roomId.toString()).resolve(filename);
+            Path file = Paths.get(getAbsolutePath()+uploadDir).resolve(roomId.toString()).resolve(filename);
             Resource resource = new UrlResource(file.toUri());
 
             if (resource.exists() || resource.isReadable()) {
@@ -67,7 +75,7 @@ public class FileStorageServiceImpl implements FileStorageService {
     public List<FileResponse> downloadAllPhotos(Long roomId) {
         List<FileResponse> photos = new ArrayList<>();
         try {
-            Path roomPath = Paths.get(uploadDir).resolve(roomId.toString());
+            Path roomPath = Paths.get(getAbsolutePath()+uploadDir).resolve(roomId.toString());
             try (Stream<Path> filePaths = Files.list(roomPath)) {
                 filePaths.forEach(file -> {
                     try {

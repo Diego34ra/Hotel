@@ -67,6 +67,10 @@ public class CommentController {
     }
 
     @DeleteMapping("{id}")
+    @Operation(summary = "Deletar um comentário")
+    @ApiResponses({
+            @ApiResponse(responseCode = "204", description = "Comentário deletado com sucesso.")
+    })
     public ResponseEntity<?> delete(@PathVariable Long id){
         commentService.delete(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();

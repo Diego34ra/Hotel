@@ -6,6 +6,7 @@ import br.edu.ifgoiano.hotel.model.BookingStatus;
 import br.edu.ifgoiano.hotel.model.CheckIn;
 import br.edu.ifgoiano.hotel.model.CheckOut;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -19,6 +20,16 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
+@JsonPropertyOrder({
+        "id",
+        "days",
+        "totalValue",
+        "bookingStatus",
+        "checkInDatePlanned",
+        "checkOutDatePlanned",
+        "client",
+        "room"
+})
 public class BookingSimpleOutputDTO {
     private Long id;
     private int days;

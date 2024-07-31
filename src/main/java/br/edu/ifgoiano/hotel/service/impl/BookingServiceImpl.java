@@ -1,6 +1,7 @@
 package br.edu.ifgoiano.hotel.service.impl;
 
 import br.edu.ifgoiano.hotel.controller.dto.mapper.MyModelMapper;
+import br.edu.ifgoiano.hotel.controller.dto.request.BookingInputDTO;
 import br.edu.ifgoiano.hotel.controller.dto.request.BookingOutputDTO;
 import br.edu.ifgoiano.hotel.controller.dto.request.BookingSimpleOutputDTO;
 import br.edu.ifgoiano.hotel.controller.exception.ResourceBadRequestException;
@@ -40,24 +41,26 @@ public class BookingServiceImpl implements BookingService {
     private MyModelMapper mapper;
 
     @Override
-    public BookingOutputDTO create(Booking booking) {
-        User client = mapper.mapTo(userService.findById(booking.getClient().getId()), User.class);
+    public BookingOutputDTO create(BookingInputDTO booking) {
+        var bookingCreate = mapper.mapTo(booking,Booking.class);
 
-        Room room = mapper.mapTo(roomService.findById(booking.getRoom().getId()), Room.class);
+        User client = mapper.mapTo(userService.findById(bookingCreate.getClient().getId()), User.class);
+
+        Room room = mapper.mapTo(roomService.findById(bookingCreate.getRoom().getId()), Room.class);
 
         if(!room.getAvailable())
             throw new ResourceBadRequestException("O quarto não está disponível para reserva");
         room.setAvailable(false);
 
-        booking.setClient(client);
-        booking.setRoom(room);
-        booking.setTotalValue(booking.getSumTotalValue(room.getPrice()));
-        booking.setBookingStatus(BookingStatus.getPadrao());
-        return mapper.mapTo(bookingRepository.save(booking),BookingOutputDTO.class);
+        bookingCreate.setClient(client);
+        bookingCreate.setRoom(room);
+        bookingCreate.setTotalValue(bookingCreate.getSumTotalValue(room.getPrice()));
+        bookingCreate.setBookingStatus(BookingStatus.getPadrao());
+        return mapper.mapTo(bookingRepository.save(bookingCreate),BookingOutputDTO.class);
     }
 
     @Override
-    public Booking addhospitality(Long bookingId, List<Long> hospitalityIds) {
+    public BookingOutputDTO addhospitality(Long bookingId, List<Long> hospitalityIds) {
         Booking booking = bookingRepository.findById(bookingId)
                 .orElseThrow(() -> new ResourceNotFoundException("Não foi encontrado todas as reservas informadas."));
 
@@ -70,11 +73,11 @@ public class BookingServiceImpl implements BookingService {
                 booking.setTotalValue(booking.getTotalValue().add(roomService.getPrice()));
             }
         });
-        return bookingRepository.save(booking);
+        return mapper.mapTo(bookingRepository.save(booking),BookingOutputDTO.class);
     }
 
     @Override
-    public Booking checkIn(Long bookingId, Long empolyeeId) {
+    public BookingOutputDTO checkIn(Long bookingId, Long empolyeeId) {
         Booking booking = bookingRepository.findById(bookingId)
                 .orElseThrow(() -> new ResourceNotFoundException("Não foi encontrado nenhuma reserva com esse id."));
 
@@ -90,11 +93,11 @@ public class BookingServiceImpl implements BookingService {
         checkIn.setDate(new Date());
         checkIn.setEmployee(employee);
         booking.setCheckIn(checkIn);
-        return bookingRepository.save(booking);
+        return mapper.mapTo(bookingRepository.save(booking),BookingOutputDTO.class);
     }
 
     @Override
-    public Booking checkOut(Long bookingId, Long empolyeeId) {
+    public BookingOutputDTO checkOut(Long bookingId, Long empolyeeId) {
         Booking booking = bookingRepository.findById(bookingId)
                 .orElseThrow(() -> new ResourceNotFoundException("Não foi encontrado nenhuma reserva com esse id."));
 
@@ -112,7 +115,7 @@ public class BookingServiceImpl implements BookingService {
         booking.setCheckOut(checkOut);
         booking.setBookingStatus(BookingStatus.FINISHED);
         booking.getRoom().setAvailable(true);
-        return bookingRepository.save(booking);
+        return mapper.mapTo(bookingRepository.save(booking),BookingOutputDTO.class);
     }
 
     @Override
@@ -121,19 +124,23 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
-    public Booking cancel(Long id) {
+    public BookingOutputDTO findById(Long id) {
+        var booking = bookingRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Não foi encontrado nenhuma reserva com esse id."));
+        return mapper.mapTo(booking,BookingOutputDTO.class);
+    }
+
+    @Override
+    public BookingOutputDTO cancel(Long id) {
         Booking booking = bookingRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Não foi encontrado nenhuma reserva com esse id."));
         booking.setBookingStatus(BookingStatus.CANCELED);
         booking.getRoom().setAvailable(true);
-        return bookingRepository.save(booking);
+        return mapper.mapTo(booking,BookingOutputDTO.class);
     }
 
     @Override
     public void delete(Long id) {
-        //Métodos idempotentes.
-        //Booking booking = bookingRepository.findById(id)
-        //        .orElseThrow(() -> new ResourceNotFoundException("Não foi encontrado nenhuma reserva com esse id."));
         bookingRepository.deleteById(id);
     }
 

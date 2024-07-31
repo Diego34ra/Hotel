@@ -1,6 +1,7 @@
 package br.edu.ifgoiano.hotel.controller;
 
 
+import br.edu.ifgoiano.hotel.controller.exception.ErrorDetails;
 import br.edu.ifgoiano.hotel.model.Hospitality;
 import br.edu.ifgoiano.hotel.service.HospitalityService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -28,7 +29,8 @@ public class HospitalityController {
     @PostMapping
     @Operation(summary = "Criar uma hospitalidade")
     @ApiResponses({
-            @ApiResponse(responseCode = "201", description = "Hospitalidade criada com sucesso.",content = { @Content(mediaType = "application/json", schema = @Schema(implementation = Hospitality.class))})
+            @ApiResponse(responseCode = "201", description = "Hospitalidade criada com sucesso.",content = { @Content(mediaType = "application/json", schema = @Schema(implementation = Hospitality.class))}),
+            @ApiResponse(responseCode = "401", description = "Acesso negado.",content = { @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorDetails.class))})
     })
     public ResponseEntity<Hospitality> create(@RequestBody Hospitality hospitality){
         var hospitalityCreated = hospitalityService.create(hospitality);
@@ -45,7 +47,8 @@ public class HospitalityController {
                             mediaType = "application/json",
                             array = @ArraySchema(schema = @Schema(implementation = Hospitality.class))
                     )
-            )
+            ),
+            @ApiResponse(responseCode = "401", description = "Acesso negado.",content = { @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorDetails.class))})
     })
     public ResponseEntity<List<Hospitality>> findAll(){
         var hospitalities = hospitalityService.findAll();
@@ -55,7 +58,8 @@ public class HospitalityController {
     @PutMapping("{id}")
     @Operation(summary = "Atualizar uma a hospitalidade")
     @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "Hospitalidade atualizada com sucesso.",content = { @Content(mediaType = "application/json", schema = @Schema(implementation = Hospitality.class))})
+            @ApiResponse(responseCode = "200", description = "Hospitalidade atualizada com sucesso.",content = { @Content(mediaType = "application/json", schema = @Schema(implementation = Hospitality.class))}),
+            @ApiResponse(responseCode = "401", description = "Acesso negado.",content = { @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorDetails.class))})
     })
     public ResponseEntity<Hospitality> update(@PathVariable Long id, @RequestBody Hospitality hospitality){
         var hospitalityUpdated = hospitalityService.update(id, hospitality);
@@ -65,7 +69,8 @@ public class HospitalityController {
     @DeleteMapping("{id}")
     @Operation(summary = "Deletar uma hospitalidade")
     @ApiResponses({
-            @ApiResponse(responseCode = "204", description = "Hospitalidade deletado com sucesso.",content = @Content)
+            @ApiResponse(responseCode = "204", description = "Hospitalidade deletado com sucesso.",content = @Content),
+            @ApiResponse(responseCode = "401", description = "Acesso negado.",content = { @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorDetails.class))})
     })
     public ResponseEntity<?> delete(@PathVariable Long id){
         hospitalityService.delete(id);

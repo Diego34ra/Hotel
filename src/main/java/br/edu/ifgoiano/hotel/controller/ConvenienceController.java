@@ -31,7 +31,8 @@ public class ConvenienceController {
     @PostMapping
     @Operation(summary = "Criar uma comodidade")
     @ApiResponses({
-            @ApiResponse(responseCode = "201", description = "Comodidade criada com sucesso.",content = { @Content(mediaType = "application/json", schema = @Schema(implementation = Convenience.class))})
+            @ApiResponse(responseCode = "201", description = "Comodidade criada com sucesso.",content = { @Content(mediaType = "application/json", schema = @Schema(implementation = Convenience.class))}),
+            @ApiResponse(responseCode = "401", description = "Acesso negado.",content = { @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorDetails.class))})
     })
     public ResponseEntity<Convenience> create(@RequestBody Convenience convenience){
         return ResponseEntity.status(HttpStatus.CREATED).body(convenienceService.create(convenience));
@@ -47,7 +48,8 @@ public class ConvenienceController {
                             mediaType = "application/json",
                             array = @ArraySchema(schema = @Schema(implementation = Convenience.class))
                     )
-            )
+            ),
+            @ApiResponse(responseCode = "401", description = "Acesso negado.",content = { @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorDetails.class))})
     })
     public ResponseEntity<List<Convenience>> findAll(){
         return ResponseEntity.status(HttpStatus.OK).body(convenienceService.findAll());
@@ -59,6 +61,7 @@ public class ConvenienceController {
     @Operation(summary = "Atualizar uma comodidade")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Comodidade atualizada com sucesso.",content = { @Content(mediaType = "application/json", schema = @Schema(implementation = Convenience.class))}),
+            @ApiResponse(responseCode = "401", description = "Acesso negado.",content = { @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorDetails.class))}),
             @ApiResponse(responseCode = "404", description = "Comodidade não encontrada.",content = { @Content(mediaType = "application/json", schema = @Schema(implementation = Convenience.class))})
     })
     public ResponseEntity<Convenience> update(@PathVariable Long id,@RequestBody Convenience convenience){
@@ -69,7 +72,8 @@ public class ConvenienceController {
     @DeleteMapping("{id}")
     @Operation(summary = "Deletar uma comodidade")
     @ApiResponses({
-            @ApiResponse(responseCode = "204", description = "Comodidade deletada com sucesso.",content = @Content)
+            @ApiResponse(responseCode = "204", description = "Comodidade deletada com sucesso.",content = @Content),
+            @ApiResponse(responseCode = "401", description = "Acesso negado.",content = { @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorDetails.class))})
     })
     public ResponseEntity<?> delete(@PathVariable Long id){
         convenienceService.delete(id);

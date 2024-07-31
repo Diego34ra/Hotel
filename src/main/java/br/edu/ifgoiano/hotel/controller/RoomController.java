@@ -14,6 +14,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.core.io.Resource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -28,6 +29,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("api/v1/hotel/rooms")
+@Tag(name = "Room")
 public class RoomController {
 
     @Autowired
@@ -122,7 +124,7 @@ public class RoomController {
     @DeleteMapping("{id}")
     @Operation(summary = "Deletar um quarto")
     @ApiResponses({
-            @ApiResponse(responseCode = "204", description = "Quarto deletado com sucesso.")
+            @ApiResponse(responseCode = "204", description = "Quarto deletado com sucesso.", content = @Content)
     })
     public ResponseEntity<?> delete(@PathVariable Long id){
         roomService.delete(id);

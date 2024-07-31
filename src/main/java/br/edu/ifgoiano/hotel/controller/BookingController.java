@@ -29,7 +29,8 @@ public class BookingController {
     @PostMapping
     @Operation(summary = "Criar uma reserva")
     @ApiResponses({
-            @ApiResponse(responseCode = "201", description = "Reserva criada com sucesso.",content = { @Content(mediaType = "application/json", schema = @Schema(implementation = BookingOutputDTO.class))})
+            @ApiResponse(responseCode = "201", description = "Reserva criada com sucesso.",content = { @Content(mediaType = "application/json", schema = @Schema(implementation = BookingOutputDTO.class))}),
+            @ApiResponse(responseCode = "401", description = "Acesso negado.",content = { @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorDetails.class))})
     })
     public ResponseEntity<BookingOutputDTO> create(@RequestBody BookingInputDTO booking){
         var bookingCreated = bookingService.create(booking);
@@ -46,7 +47,8 @@ public class BookingController {
                             mediaType = "application/json",
                             array = @ArraySchema(schema = @Schema(implementation = BookingSimpleOutputDTO.class))
                     )
-            )
+            ),
+            @ApiResponse(responseCode = "401", description = "Acesso negado.",content = { @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorDetails.class))})
     })
     public ResponseEntity<List<BookingSimpleOutputDTO>> findAll(){
         var bookings = bookingService.findAll();
@@ -57,6 +59,7 @@ public class BookingController {
     @Operation(summary = "Busca uma reserva pelo id")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Reserva encontrada com sucesso.",content = { @Content(mediaType = "application/json", schema = @Schema(implementation = BookingOutputDTO.class))}),
+            @ApiResponse(responseCode = "401", description = "Acesso negado.",content = { @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorDetails.class))}),
             @ApiResponse(responseCode = "404", description = "Reserva não encontrada.",content = { @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorDetails.class))})
     })
     public ResponseEntity<BookingOutputDTO> findById(@PathVariable Long id){
@@ -68,6 +71,7 @@ public class BookingController {
     @Operation(summary = "Adicionar hospitalidade")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Hospitalidade adicionada com sucesso.",content = { @Content(mediaType = "application/json", schema = @Schema(implementation = BookingOutputDTO.class))}),
+            @ApiResponse(responseCode = "401", description = "Acesso negado.",content = { @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorDetails.class))}),
             @ApiResponse(responseCode = "404", description = "Não foi encontrado todas as reservas informadas.",content = { @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorDetails.class))})
     })
     public ResponseEntity<BookingOutputDTO> addHospitality(@PathVariable Long bookingId,@RequestBody HospitalityDTO hospitalityDTO){
@@ -79,6 +83,7 @@ public class BookingController {
     @Operation(summary = "Realizar checkIn")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "CheckIn realizado com sucesso.",content = { @Content(mediaType = "application/json", schema = @Schema(implementation = BookingOutputDTO.class))}),
+            @ApiResponse(responseCode = "401", description = "Acesso negado.",content = { @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorDetails.class))}),
             @ApiResponse(responseCode = "404", description = "Não é possível fazer checkIn de reserva cancelada.",content = { @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorDetails.class))})
     })
     public ResponseEntity<BookingOutputDTO> checkIn(@PathVariable Long bookingId,@RequestParam Long employeeId){
@@ -90,6 +95,7 @@ public class BookingController {
     @Operation(summary = "Realizar checkOut")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "CheckOut realizado com sucesso.",content = { @Content(mediaType = "application/json", schema = @Schema(implementation = BookingOutputDTO.class))}),
+            @ApiResponse(responseCode = "401", description = "Acesso negado.",content = { @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorDetails.class))}),
             @ApiResponse(responseCode = "404", description = "Não é possível fazer checkOut de reserva cancelada.",content = { @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorDetails.class))})
     })
     public ResponseEntity<BookingOutputDTO> checkOut(@PathVariable Long bookingId,@RequestParam Long employeeId){
@@ -101,6 +107,7 @@ public class BookingController {
     @Operation(summary = "Cancelar reserva")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Reserva cancelada com sucesso.",content = { @Content(mediaType = "application/json", schema = @Schema(implementation = BookingOutputDTO.class))}),
+            @ApiResponse(responseCode = "401", description = "Acesso negado.",content = { @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorDetails.class))}),
             @ApiResponse(responseCode = "404", description = "Não foi encontrado nenhuma reserva com esse id.",content = { @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorDetails.class))})
     })
     public ResponseEntity<BookingOutputDTO> cancel(@PathVariable Long id){
@@ -113,7 +120,8 @@ public class BookingController {
     @DeleteMapping("{id}")
     @Operation(summary = "Deletar uma reserva")
     @ApiResponses({
-            @ApiResponse(responseCode = "204", description = "Reserva deletada com sucesso.")
+            @ApiResponse(responseCode = "204", description = "Reserva deletada com sucesso."),
+            @ApiResponse(responseCode = "401", description = "Acesso negado.",content = { @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorDetails.class))})
     })
     public ResponseEntity<?> delete(@PathVariable Long id){
         bookingService.delete(id);

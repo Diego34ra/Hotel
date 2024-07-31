@@ -33,7 +33,8 @@ public class CommentController {
     @PostMapping
     @Operation(summary = "Criar um comentário")
     @ApiResponses({
-            @ApiResponse(responseCode = "201", description = "Comentário criado com sucesso.",content = { @Content(mediaType = "application/json", schema = @Schema(implementation = CommentOutputDTO.class))})
+            @ApiResponse(responseCode = "201", description = "Comentário criado com sucesso.",content = { @Content(mediaType = "application/json", schema = @Schema(implementation = CommentOutputDTO.class))}),
+            @ApiResponse(responseCode = "401", description = "Acesso negado.",content = { @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorDetails.class))})
     })
     public ResponseEntity<CommentOutputDTO> create(@RequestBody CommentInputDTO comment, @RequestParam Long clientId, @RequestParam Long roomId){
         var commentCreated = commentService.create(comment,clientId,roomId);
@@ -50,7 +51,8 @@ public class CommentController {
                             mediaType = "application/json",
                             array = @ArraySchema(schema = @Schema(implementation = CommentOutputDTO.class))
                     )
-            )
+            ),
+            @ApiResponse(responseCode = "401", description = "Acesso negado.",content = { @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorDetails.class))})
     })
     public ResponseEntity<List<CommentOutputDTO>> findAll(@PathVariable Long roomId){
         List<CommentOutputDTO> commentOutputDTOS = commentService.findAllByRoomId(roomId);
@@ -61,6 +63,7 @@ public class CommentController {
     @Operation(summary = "Atualizar um comentário")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Comentário atualizado com sucesso.",content = { @Content(mediaType = "application/json", schema = @Schema(implementation = CommentOutputDTO.class))}),
+            @ApiResponse(responseCode = "401", description = "Acesso negado.",content = { @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorDetails.class))}),
             @ApiResponse(responseCode = "404", description = "Comentário não encontrado.",content = { @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorDetails.class))})
     })
     public ResponseEntity<CommentOutputDTO> update(@PathVariable Long id,@RequestBody CommentInputDTO comment){
@@ -71,7 +74,8 @@ public class CommentController {
     @DeleteMapping("{id}")
     @Operation(summary = "Deletar um comentário")
     @ApiResponses({
-            @ApiResponse(responseCode = "204", description = "Comentário deletado com sucesso.",content = @Content)
+            @ApiResponse(responseCode = "204", description = "Comentário deletado com sucesso.",content = @Content),
+            @ApiResponse(responseCode = "401", description = "Acesso negado.",content = { @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorDetails.class))})
     })
     public ResponseEntity<?> delete(@PathVariable Long id){
         commentService.delete(id);

@@ -11,6 +11,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpStatus;
@@ -20,7 +21,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("api/v1/hotel/convenience")
+@RequestMapping("api/v1/hotel/conveniences")
+@Tag(name = "Convenience")
 public class ConvenienceController {
 
     @Autowired
@@ -67,7 +69,7 @@ public class ConvenienceController {
     @DeleteMapping("{id}")
     @Operation(summary = "Deletar uma comodidade")
     @ApiResponses({
-            @ApiResponse(responseCode = "204", description = "Comodidade deletada com sucesso.")
+            @ApiResponse(responseCode = "204", description = "Comodidade deletada com sucesso.",content = @Content)
     })
     public ResponseEntity<?> delete(@PathVariable Long id){
         convenienceService.delete(id);

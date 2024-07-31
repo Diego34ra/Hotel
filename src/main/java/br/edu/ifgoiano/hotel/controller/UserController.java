@@ -26,7 +26,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("api/v1/hotel/users")
-@Order(1)
+@Tag(name = "User")
 public class UserController {
 
     @Autowired
@@ -89,7 +89,7 @@ public class UserController {
     @DeleteMapping("/{id}")
     @Operation(summary = "Deletar um usuário")
     @ApiResponses({
-            @ApiResponse(responseCode = "204", description = "Usuário deletado com sucesso.")
+            @ApiResponse(responseCode = "204", description = "Usuário deletado com sucesso.",content = @Content)
     })
     public ResponseEntity<?> delete(@PathVariable Long id){
         userService.delete(id);

@@ -1,11 +1,11 @@
 package br.edu.ifgoiano.hotel.controller;
 
 
-import br.edu.ifgoiano.hotel.controller.dto.request.userDTOs.UserInputDTO;
+import br.edu.ifgoiano.hotel.controller.dto.request.userDTO.UserInputDTO;
 import br.edu.ifgoiano.hotel.controller.exception.ErrorDetails;
-import br.edu.ifgoiano.hotel.controller.dto.request.userDTOs.UserDetailOutputDTO;
+import br.edu.ifgoiano.hotel.controller.dto.request.userDTO.UserDetailOutputDTO;
 import br.edu.ifgoiano.hotel.controller.dto.mapper.MyModelMapper;
-import br.edu.ifgoiano.hotel.controller.dto.request.userDTOs.UserSimpleOutputDTO;
+import br.edu.ifgoiano.hotel.controller.dto.request.userDTO.UserSimpleOutputDTO;
 import br.edu.ifgoiano.hotel.model.User;
 import br.edu.ifgoiano.hotel.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;

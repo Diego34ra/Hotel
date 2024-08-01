@@ -1,6 +1,7 @@
-package br.edu.ifgoiano.hotel.controller.dto.request;
+package br.edu.ifgoiano.hotel.controller.dto.request.bookingDTO;
 
-import br.edu.ifgoiano.hotel.controller.dto.request.userDTOs.UserDetailOutputDTO;
+import br.edu.ifgoiano.hotel.controller.dto.request.roomDTO.RoomOutputDTO;
+import br.edu.ifgoiano.hotel.controller.dto.request.userDTO.UserDetailOutputDTO;
 import br.edu.ifgoiano.hotel.model.*;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;

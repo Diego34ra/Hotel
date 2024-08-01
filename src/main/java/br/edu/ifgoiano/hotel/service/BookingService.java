@@ -1,9 +1,8 @@
 package br.edu.ifgoiano.hotel.service;
 
-import br.edu.ifgoiano.hotel.controller.dto.request.BookingInputDTO;
-import br.edu.ifgoiano.hotel.controller.dto.request.BookingOutputDTO;
-import br.edu.ifgoiano.hotel.controller.dto.request.BookingSimpleOutputDTO;
-import br.edu.ifgoiano.hotel.model.Booking;
+import br.edu.ifgoiano.hotel.controller.dto.request.bookingDTO.BookingInputDTO;
+import br.edu.ifgoiano.hotel.controller.dto.request.bookingDTO.BookingOutputDTO;
+import br.edu.ifgoiano.hotel.controller.dto.request.bookingDTO.BookingSimpleOutputDTO;
 
 import java.util.List;
 

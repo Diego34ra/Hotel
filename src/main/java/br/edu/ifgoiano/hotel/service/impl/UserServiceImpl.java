@@ -1,9 +1,10 @@
 package br.edu.ifgoiano.hotel.service.impl;
 
+import br.edu.ifgoiano.hotel.controller.UserController;
 import br.edu.ifgoiano.hotel.controller.dto.mapper.MyModelMapper;
-import br.edu.ifgoiano.hotel.controller.dto.request.userDTOs.UserInputDTO;
-import br.edu.ifgoiano.hotel.controller.dto.request.userDTOs.UserDetailOutputDTO;
-import br.edu.ifgoiano.hotel.controller.dto.request.userDTOs.UserSimpleOutputDTO;
+import br.edu.ifgoiano.hotel.controller.dto.request.userDTO.UserInputDTO;
+import br.edu.ifgoiano.hotel.controller.dto.request.userDTO.UserDetailOutputDTO;
+import br.edu.ifgoiano.hotel.controller.dto.request.userDTO.UserSimpleOutputDTO;
 import br.edu.ifgoiano.hotel.controller.exception.ResourceBadRequestException;
 import br.edu.ifgoiano.hotel.controller.exception.ResourceNotFoundException;
 import br.edu.ifgoiano.hotel.model.User;
@@ -16,6 +17,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 import java.util.List;
 
@@ -44,12 +47,20 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         String encryptedPassword = new BCryptPasswordEncoder().encode(user.getPassword());
         userCreate.setPassword(encryptedPassword);
         userCreate.getPhones().forEach(phone -> phone.setUser(userCreate));
-        return mapper.mapTo(userRepository.save(userCreate), UserDetailOutputDTO.class);
+
+        UserDetailOutputDTO userDTO = mapper.mapTo(userRepository.save(userCreate), UserDetailOutputDTO.class);
+        return userDTO.add(linkTo(methodOn(UserController.class).findById(userDTO.getKey())).withSelfRel());
     }
 
     @Override
     public List<UserSimpleOutputDTO> findAll() {
-        return mapper.toList(userRepository.findAll(), UserSimpleOutputDTO.class);
+        List<UserSimpleOutputDTO> userSimpleOutputDTOList = mapper.toList(
+                userRepository.findAll(), UserSimpleOutputDTO.class).stream()
+                .map(userDTO -> userDTO.add(linkTo(methodOn(UserController.class)
+                        .findById(userDTO.getKey()))
+                        .withSelfRel())).toList();
+
+        return userSimpleOutputDTOList;
     }
 
     @Override
@@ -84,7 +95,8 @@ public class UserServiceImpl implements UserService, UserDetailsService {
             user.getPhones().forEach(phone -> phone.setUser(user));
         }
 
-        return mapper.mapTo(userRepository.save(user),UserDetailOutputDTO.class);
+        UserDetailOutputDTO userDTO = mapper.mapTo(userRepository.save(user), UserDetailOutputDTO.class);
+        return userDTO.add(linkTo(methodOn(UserController.class).findById(userDTO.getKey())).withSelfRel());
     }
 
     @Override

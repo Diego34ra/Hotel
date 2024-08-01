@@ -1,8 +1,10 @@
 package br.edu.ifgoiano.hotel.controller;
 
 import br.edu.ifgoiano.hotel.controller.dto.request.*;
+import br.edu.ifgoiano.hotel.controller.dto.request.bookingDTO.BookingInputDTO;
+import br.edu.ifgoiano.hotel.controller.dto.request.bookingDTO.BookingOutputDTO;
+import br.edu.ifgoiano.hotel.controller.dto.request.bookingDTO.BookingSimpleOutputDTO;
 import br.edu.ifgoiano.hotel.controller.exception.ErrorDetails;
-import br.edu.ifgoiano.hotel.model.Booking;
 import br.edu.ifgoiano.hotel.service.BookingService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;

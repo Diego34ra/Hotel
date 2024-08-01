@@ -1,4 +1,4 @@
-package br.edu.ifgoiano.hotel.controller.dto.request;
+package br.edu.ifgoiano.hotel.controller.dto.request.roomDTO;
 
 import br.edu.ifgoiano.hotel.model.RoomType;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;

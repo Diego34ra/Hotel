@@ -1,5 +1,6 @@
 package br.edu.ifgoiano.hotel.service.impl;
 
+import br.edu.ifgoiano.hotel.controller.UserController;
 import br.edu.ifgoiano.hotel.controller.dto.mapper.MyModelMapper;
 import br.edu.ifgoiano.hotel.controller.dto.request.userDTO.UserInputDTO;
 import br.edu.ifgoiano.hotel.controller.dto.request.userDTO.UserDetailOutputDTO;
@@ -16,6 +17,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 import java.util.List;
 
@@ -49,7 +52,13 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Override
     public List<UserSimpleOutputDTO> findAll() {
-        return mapper.toList(userRepository.findAll(), UserSimpleOutputDTO.class);
+        List<UserSimpleOutputDTO> userSimpleOutputDTOList = mapper.toList(
+                userRepository.findAll(), UserSimpleOutputDTO.class).stream()
+                .map(userDTO -> userDTO.add(linkTo(methodOn(UserController.class)
+                        .findById(userDTO.getKey()))
+                        .withSelfRel())).toList();
+
+        return userSimpleOutputDTOList;
     }
 
     @Override

@@ -1,6 +1,11 @@
 package br.edu.ifgoiano.hotel.controller.dto.mapper;
 
+import br.edu.ifgoiano.hotel.controller.dto.request.userDTO.UserSimpleOutputDTO;
+import br.edu.ifgoiano.hotel.model.User;
+import jakarta.annotation.PostConstruct;
 import org.modelmapper.ModelMapper;
+import org.modelmapper.PropertyMap;
+import org.modelmapper.TypeMap;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -9,6 +14,17 @@ import java.util.stream.Collectors;
 @Component
 public class MyModelMapper {
     private static final ModelMapper MODEL_MAPPER = new ModelMapper();
+
+    @PostConstruct
+    public void setup() {
+        // Definição de mapeamentos básicos
+        MODEL_MAPPER.addMappings(new PropertyMap<User, UserSimpleOutputDTO>() {
+            @Override
+            protected void configure() {
+                map().setKey(source.getId());
+            }
+        });
+    }
 
     public <S, D> D mapTo(S source, Class<D> destClass) {
         return MODEL_MAPPER.map(source, destClass);
@@ -19,5 +35,4 @@ public class MyModelMapper {
                 .map(entity -> MODEL_MAPPER.map(entity, outClass))
                 .collect(Collectors.toList());
     }
-
 }

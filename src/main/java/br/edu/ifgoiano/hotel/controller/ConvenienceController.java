@@ -1,7 +1,5 @@
 package br.edu.ifgoiano.hotel.controller;
 
-import br.edu.ifgoiano.hotel.controller.dto.request.CommentOutputDTO;
-import br.edu.ifgoiano.hotel.controller.dto.request.RoomOutputDTO;
 import br.edu.ifgoiano.hotel.controller.exception.ErrorDetails;
 import br.edu.ifgoiano.hotel.model.Convenience;
 import br.edu.ifgoiano.hotel.service.ConvenienceService;
@@ -13,7 +11,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

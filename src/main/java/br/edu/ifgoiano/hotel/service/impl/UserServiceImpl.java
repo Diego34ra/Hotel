@@ -1,9 +1,9 @@
 package br.edu.ifgoiano.hotel.service.impl;
 
 import br.edu.ifgoiano.hotel.controller.dto.mapper.MyModelMapper;
-import br.edu.ifgoiano.hotel.controller.dto.request.userDTOs.UserInputDTO;
-import br.edu.ifgoiano.hotel.controller.dto.request.userDTOs.UserDetailOutputDTO;
-import br.edu.ifgoiano.hotel.controller.dto.request.userDTOs.UserSimpleOutputDTO;
+import br.edu.ifgoiano.hotel.controller.dto.request.userDTO.UserInputDTO;
+import br.edu.ifgoiano.hotel.controller.dto.request.userDTO.UserDetailOutputDTO;
+import br.edu.ifgoiano.hotel.controller.dto.request.userDTO.UserSimpleOutputDTO;
 import br.edu.ifgoiano.hotel.controller.exception.ResourceBadRequestException;
 import br.edu.ifgoiano.hotel.controller.exception.ResourceNotFoundException;
 import br.edu.ifgoiano.hotel.model.User;

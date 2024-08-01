@@ -1,8 +1,8 @@
 package br.edu.ifgoiano.hotel.service;
 
-import br.edu.ifgoiano.hotel.controller.dto.request.userDTOs.UserInputDTO;
-import br.edu.ifgoiano.hotel.controller.dto.request.userDTOs.UserDetailOutputDTO;
-import br.edu.ifgoiano.hotel.controller.dto.request.userDTOs.UserSimpleOutputDTO;
+import br.edu.ifgoiano.hotel.controller.dto.request.userDTO.UserInputDTO;
+import br.edu.ifgoiano.hotel.controller.dto.request.userDTO.UserDetailOutputDTO;
+import br.edu.ifgoiano.hotel.controller.dto.request.userDTO.UserSimpleOutputDTO;
 import br.edu.ifgoiano.hotel.model.User;
 import org.springframework.security.core.userdetails.UserDetails;
 

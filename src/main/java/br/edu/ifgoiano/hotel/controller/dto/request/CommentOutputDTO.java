@@ -1,6 +1,6 @@
 package br.edu.ifgoiano.hotel.controller.dto.request;
 
-import br.edu.ifgoiano.hotel.controller.dto.request.userDTOs.UserSimpleOutputDTO;
+import br.edu.ifgoiano.hotel.controller.dto.request.userDTO.UserSimpleOutputDTO;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

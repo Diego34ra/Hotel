@@ -47,7 +47,9 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         String encryptedPassword = new BCryptPasswordEncoder().encode(user.getPassword());
         userCreate.setPassword(encryptedPassword);
         userCreate.getPhones().forEach(phone -> phone.setUser(userCreate));
-        return mapper.mapTo(userRepository.save(userCreate), UserDetailOutputDTO.class);
+
+        UserDetailOutputDTO userDTO = mapper.mapTo(userRepository.save(userCreate), UserDetailOutputDTO.class);
+        return userDTO.add(linkTo(methodOn(UserController.class).findById(userDTO.getKey())).withSelfRel());
     }
 
     @Override
@@ -93,7 +95,8 @@ public class UserServiceImpl implements UserService, UserDetailsService {
             user.getPhones().forEach(phone -> phone.setUser(user));
         }
 
-        return mapper.mapTo(userRepository.save(user),UserDetailOutputDTO.class);
+        UserDetailOutputDTO userDTO = mapper.mapTo(userRepository.save(user), UserDetailOutputDTO.class);
+        return userDTO.add(linkTo(methodOn(UserController.class).findById(userDTO.getKey())).withSelfRel());
     }
 
     @Override

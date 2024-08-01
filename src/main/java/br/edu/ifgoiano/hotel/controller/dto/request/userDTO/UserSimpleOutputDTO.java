@@ -14,6 +14,7 @@ import java.io.Serializable;
 @NoArgsConstructor
 @Setter
 public class UserSimpleOutputDTO extends RepresentationModel<UserSimpleOutputDTO> implements Serializable{
+    @JsonProperty("id")
     private Long key;
     private String firstName;
     private String lastName;

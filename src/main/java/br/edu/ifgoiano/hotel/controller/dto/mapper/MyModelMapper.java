@@ -1,5 +1,6 @@
 package br.edu.ifgoiano.hotel.controller.dto.mapper;
 
+import br.edu.ifgoiano.hotel.controller.dto.request.userDTO.UserDetailOutputDTO;
 import br.edu.ifgoiano.hotel.controller.dto.request.userDTO.UserSimpleOutputDTO;
 import br.edu.ifgoiano.hotel.model.User;
 import jakarta.annotation.PostConstruct;
@@ -19,6 +20,13 @@ public class MyModelMapper {
     public void setup() {
         // Definição de mapeamentos básicos
         MODEL_MAPPER.addMappings(new PropertyMap<User, UserSimpleOutputDTO>() {
+            @Override
+            protected void configure() {
+                map().setKey(source.getId());
+            }
+        });
+
+        MODEL_MAPPER.addMappings(new PropertyMap<User, UserDetailOutputDTO>() {
             @Override
             protected void configure() {
                 map().setKey(source.getId());

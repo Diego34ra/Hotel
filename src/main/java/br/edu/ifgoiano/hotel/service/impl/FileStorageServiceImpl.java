@@ -64,12 +64,6 @@ public class FileStorageServiceImpl implements FileStorageService {
                 if (contentType == null) {
                     contentType = "application/octet-stream";
                 }
-                long sizeInBytes = Files.size(file);
-                String size = formatSize(sizeInBytes);
-                String originalFilename = resource.getFilename();
-                String downloadUri = "/api/v1/hotel/rooms/" + roomId + "/download-photo/"+originalFilename;
-
-
 
                 return new FileResponseDownload(resource,contentType);
             } else {
@@ -96,8 +90,9 @@ public class FileStorageServiceImpl implements FileStorageService {
                             }
                             long sizeInBytes = Files.size(file);
                             String size = formatSize(sizeInBytes);
-                            String originalFilename = file.getOriginalFilename();
-                            photos.add(new FileResponse(contentType,contentType,size,null));
+                            String originalFilename = resource.getFilename();
+                            String downloadUri = "/api/v1/hotel/rooms/" + roomId + "/download-photo/"+originalFilename;
+                            photos.add(new FileResponse(originalFilename,contentType,size,downloadUri));
                         }
                     } catch (Exception e) {
                         System.out.println("Error processing file: " + file.toString());

@@ -1,9 +1,14 @@
 # MySQL datasource configuration
 spring:
+  servlet:
+    multipart:
+      max-file-size: 5MB  # Tamanho máximo de um único arquivo
+      max-request-size: 20MB  # Tamanho máximo da requisição (todos os arquivos somados)
+      enabled: true  # Habilita o suporte a multipart
   datasource:
     url: jdbc:mysql://localhost:3306/hotel?useSSL=false&serverTimezone=UTC
     username: root
-    password: 123456
+    password:
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     hibernate:

@@ -1,10 +1,8 @@
-package br.edu.ifgoiano.hotel.controller.dto.request;
+package br.edu.ifgoiano.hotel.controller.dto.request.bookingDTO;
 
-import br.edu.ifgoiano.hotel.controller.dto.request.userDTOs.UserDetailOutputDTO;
-import br.edu.ifgoiano.hotel.controller.dto.request.userDTOs.UserSimpleOutputDTO;
+import br.edu.ifgoiano.hotel.controller.dto.request.roomDTO.RoomSimpleOutputDTO;
+import br.edu.ifgoiano.hotel.controller.dto.request.userDTO.UserSimpleOutputDTO;
 import br.edu.ifgoiano.hotel.model.BookingStatus;
-import br.edu.ifgoiano.hotel.model.CheckIn;
-import br.edu.ifgoiano.hotel.model.CheckOut;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import lombok.AllArgsConstructor;

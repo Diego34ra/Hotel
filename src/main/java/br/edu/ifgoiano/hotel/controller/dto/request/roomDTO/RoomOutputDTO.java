@@ -1,5 +1,6 @@
-package br.edu.ifgoiano.hotel.controller.dto.request;
+package br.edu.ifgoiano.hotel.controller.dto.request.roomDTO;
 
+import br.edu.ifgoiano.hotel.controller.dto.request.CommentOutputDTO;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -13,7 +14,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Setter
-public class RoomNoCommentOutputDTO {
+public class RoomOutputDTO {
     private Long id;
     private String description;
     private BigDecimal price;
@@ -21,4 +22,6 @@ public class RoomNoCommentOutputDTO {
     private Integer capacity;
     private Integer floor;
     private String type;
+    @JsonManagedReference // Define o lado pai da relação
+    private List<CommentOutputDTO> comments;
 }

@@ -1,11 +1,11 @@
 package br.edu.ifgoiano.hotel.controller;
 
 
-import br.edu.ifgoiano.hotel.controller.dto.request.userDTOs.UserInputDTO;
+import br.edu.ifgoiano.hotel.controller.dto.request.userDTO.UserInputDTO;
 import br.edu.ifgoiano.hotel.controller.exception.ErrorDetails;
-import br.edu.ifgoiano.hotel.controller.dto.request.userDTOs.UserDetailOutputDTO;
+import br.edu.ifgoiano.hotel.controller.dto.request.userDTO.UserDetailOutputDTO;
 import br.edu.ifgoiano.hotel.controller.dto.mapper.MyModelMapper;
-import br.edu.ifgoiano.hotel.controller.dto.request.userDTOs.UserSimpleOutputDTO;
+import br.edu.ifgoiano.hotel.controller.dto.request.userDTO.UserSimpleOutputDTO;
 import br.edu.ifgoiano.hotel.model.User;
 import br.edu.ifgoiano.hotel.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -39,7 +39,8 @@ public class UserController {
     @Order(1)
     @Operation(summary = "Criar um usuário")
     @ApiResponses({
-            @ApiResponse(responseCode = "201", description = "Usuário criado com sucesso.",content = { @Content(mediaType = "application/json", schema = @Schema(implementation = UserDetailOutputDTO.class))})
+            @ApiResponse(responseCode = "201", description = "Usuário criado com sucesso.",content = { @Content(mediaType = "application/json", schema = @Schema(implementation = UserDetailOutputDTO.class))}),
+            @ApiResponse(responseCode = "401", description = "Acesso negado.",content = { @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorDetails.class))})
     })
     public ResponseEntity<UserDetailOutputDTO> create(@RequestBody @Valid UserInputDTO user){
         return ResponseEntity.status(HttpStatus.CREATED).body(userService.create(user));
@@ -56,7 +57,8 @@ public class UserController {
                             mediaType = "application/json",
                             array = @ArraySchema(schema = @Schema(implementation = UserSimpleOutputDTO.class))
                     )
-            )
+            ),
+            @ApiResponse(responseCode = "401", description = "Acesso negado.",content = { @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorDetails.class))})
     })
     public ResponseEntity<List<UserSimpleOutputDTO>> findAll(){
         List<UserSimpleOutputDTO> userOutputList = modelMapper.toList(userService.findAll(), UserSimpleOutputDTO.class);
@@ -68,6 +70,7 @@ public class UserController {
     @Operation(summary = "Busca um usuário pelo id")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Usuário encontrado com sucesso.",content = { @Content(mediaType = "application/json", schema = @Schema(implementation = UserDetailOutputDTO.class))}),
+            @ApiResponse(responseCode = "401", description = "Acesso negado.",content = { @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorDetails.class))}),
             @ApiResponse(responseCode = "404", description = "Usuário não encontrado.",content = { @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorDetails.class))})
     })
     public ResponseEntity<UserDetailOutputDTO> findById(@PathVariable Long id){
@@ -79,6 +82,7 @@ public class UserController {
     @Operation(summary = "Atualizar um usuário")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Usuário atualizado com sucesso.",content = { @Content(mediaType = "application/json", schema = @Schema(implementation = UserDetailOutputDTO.class))}),
+            @ApiResponse(responseCode = "401", description = "Acesso negado.",content = { @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorDetails.class))}),
             @ApiResponse(responseCode = "404", description = "Usuário não encontrado.",content = { @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorDetails.class))})
     })
     public ResponseEntity<UserDetailOutputDTO> update(@PathVariable Long id, @RequestBody User user){
@@ -89,7 +93,8 @@ public class UserController {
     @DeleteMapping("/{id}")
     @Operation(summary = "Deletar um usuário")
     @ApiResponses({
-            @ApiResponse(responseCode = "204", description = "Usuário deletado com sucesso.",content = @Content)
+            @ApiResponse(responseCode = "204", description = "Usuário deletado com sucesso.",content = @Content),
+            @ApiResponse(responseCode = "401", description = "Acesso negado.",content = { @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorDetails.class))})
     })
     public ResponseEntity<?> delete(@PathVariable Long id){
         userService.delete(id);

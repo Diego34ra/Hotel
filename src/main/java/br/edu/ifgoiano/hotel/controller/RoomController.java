@@ -2,6 +2,9 @@ package br.edu.ifgoiano.hotel.controller;
 
 import br.edu.ifgoiano.hotel.controller.dto.mapper.MyModelMapper;
 import br.edu.ifgoiano.hotel.controller.dto.request.*;
+import br.edu.ifgoiano.hotel.controller.dto.request.roomDTO.RoomInputDTO;
+import br.edu.ifgoiano.hotel.controller.dto.request.roomDTO.RoomNoCommentOutputDTO;
+import br.edu.ifgoiano.hotel.controller.dto.request.roomDTO.RoomOutputDTO;
 import br.edu.ifgoiano.hotel.controller.exception.ErrorDetails;
 import br.edu.ifgoiano.hotel.model.FileDetails;
 import br.edu.ifgoiano.hotel.model.FileResponse;
@@ -44,7 +47,8 @@ public class RoomController {
     @PostMapping
     @Operation(summary = "Criar um quarto")
     @ApiResponses({
-            @ApiResponse(responseCode = "201", description = "Quarto criado com sucesso.",content = { @Content(mediaType = "application/json", schema = @Schema(implementation = RoomOutputDTO.class))})
+            @ApiResponse(responseCode = "201", description = "Quarto criado com sucesso.",content = { @Content(mediaType = "application/json", schema = @Schema(implementation = RoomOutputDTO.class))}),
+            @ApiResponse(responseCode = "401", description = "Acesso negado.",content = { @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorDetails.class))})
     })
     public ResponseEntity<RoomOutputDTO> create(@RequestBody RoomInputDTO room){
         var roomCreated = roomService.create(room);
@@ -53,12 +57,21 @@ public class RoomController {
 
     @PostMapping(value = "{roomId}/upload-photo", consumes = "multipart/form-data")
     @Operation(summary = "Enviar foto de um quarto")
+    @ApiResponses({
+            @ApiResponse(responseCode = "201", description = "Foto salva com sucesso.",content = { @Content(mediaType = "application/json", schema = @Schema(implementation = MessageResponseDTO.class))}),
+            @ApiResponse(responseCode = "401", description = "Acesso negado.",content = { @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorDetails.class))})
+    })
     public ResponseEntity<MessageResponseDTO> uploadPhoto(@PathVariable Long roomId, @RequestParam("photo") MultipartFile photo) {
         var message = fileStorageService.saveFile(roomId, photo);
         return ResponseEntity.status(HttpStatus.OK).body(message);
     }
 
     @GetMapping("/{roomId}/download-photo/{filename:.+}")
+    @Operation(summary = "Baixar de uma foto específico")
+    @ApiResponses({
+            @ApiResponse(responseCode = "201", description = "Download iniciado com sucesso.",content = { @Content(mediaType = "application/json", schema = @Schema(implementation = Resource.class))}),
+            @ApiResponse(responseCode = "401", description = "Acesso negado.",content = { @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorDetails.class))})
+    })
     public ResponseEntity<Resource> downloadPhoto(
             @PathVariable Long roomId,
             @PathVariable String filename) {
@@ -70,6 +83,11 @@ public class RoomController {
     }
 
     @GetMapping("/{roomId}/photo")
+    @Operation(summary = "Busca a foto de um quarto")
+    @ApiResponses({
+            @ApiResponse(responseCode = "201", description = "Foto do Quarto buscada com sucesso.",content = { @Content(mediaType = "application/json", schema = @Schema(implementation = Resource.class))}),
+            @ApiResponse(responseCode = "401", description = "Acesso negado.",content = { @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorDetails.class))})
+    })
     public ResponseEntity<List<FileDetails>> listAllPhotos(@PathVariable Long roomId) {
         List<FileResponse> fileResponses = fileStorageService.downloadAllPhotos(roomId);
         List<FileDetails> fileDetailsList = fileResponses.stream()
@@ -93,7 +111,8 @@ public class RoomController {
                             mediaType = "application/json",
                             array = @ArraySchema(schema = @Schema(implementation = RoomOutputDTO.class))
                     )
-            )
+            ),
+            @ApiResponse(responseCode = "401", description = "Acesso negado.",content = { @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorDetails.class))})
     })
     public ResponseEntity<List<RoomNoCommentOutputDTO>> findAll(){
         List<RoomNoCommentOutputDTO> rooms = roomService.findAll();
@@ -104,6 +123,7 @@ public class RoomController {
     @Operation(summary = "Busca um quarto pelo id")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Quarto encontrado com sucesso.",content = { @Content(mediaType = "application/json", schema = @Schema(implementation = RoomOutputDTO.class))}),
+            @ApiResponse(responseCode = "401", description = "Acesso negado.",content = { @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorDetails.class))}),
             @ApiResponse(responseCode = "404", description = "Quarto não encontrado.",content = { @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorDetails.class))})
     })
     public ResponseEntity<RoomOutputDTO> findById(@PathVariable Long id){
@@ -115,6 +135,7 @@ public class RoomController {
     @Operation(summary = "Atualizar um quarto")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Quarto atualizado com sucesso.",content = { @Content(mediaType = "application/json", schema = @Schema(implementation = RoomOutputDTO.class))}),
+            @ApiResponse(responseCode = "401", description = "Acesso negado.",content = { @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorDetails.class))}),
             @ApiResponse(responseCode = "404", description = "Quarto não encontrado.",content = { @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorDetails.class))})
     })
     public ResponseEntity<RoomOutputDTO> update(@PathVariable Long id, @RequestBody Room room){
@@ -124,7 +145,8 @@ public class RoomController {
     @DeleteMapping("{id}")
     @Operation(summary = "Deletar um quarto")
     @ApiResponses({
-            @ApiResponse(responseCode = "204", description = "Quarto deletado com sucesso.", content = @Content)
+            @ApiResponse(responseCode = "204", description = "Quarto deletado com sucesso.", content = @Content),
+            @ApiResponse(responseCode = "401", description = "Acesso negado.",content = { @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorDetails.class))})
     })
     public ResponseEntity<?> delete(@PathVariable Long id){
         roomService.delete(id);

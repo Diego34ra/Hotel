@@ -1,5 +1,7 @@
 package br.edu.ifgoiano.hotel.service.impl;
 
+import br.edu.ifgoiano.hotel.controller.BookingController;
+import br.edu.ifgoiano.hotel.controller.RoomController;
 import br.edu.ifgoiano.hotel.controller.dto.mapper.MyModelMapper;
 import br.edu.ifgoiano.hotel.controller.dto.request.bookingDTO.BookingInputDTO;
 import br.edu.ifgoiano.hotel.controller.dto.request.bookingDTO.BookingOutputDTO;
@@ -18,6 +20,9 @@ import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.List;
+
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @Service
 public class BookingServiceImpl implements BookingService {
@@ -56,7 +61,9 @@ public class BookingServiceImpl implements BookingService {
         bookingCreate.setRoom(room);
         bookingCreate.setTotalValue(bookingCreate.getSumTotalValue(room.getPrice()));
         bookingCreate.setBookingStatus(BookingStatus.getPadrao());
-        return mapper.mapTo(bookingRepository.save(bookingCreate),BookingOutputDTO.class);
+        return mapper.mapTo(bookingRepository.save(bookingCreate),BookingOutputDTO.class)
+                .add(linkTo(methodOn(BookingController.class).findById(bookingCreate.getId())).withSelfRel())
+                .add(linkTo(methodOn(RoomController.class).findById(booking.getRoom().getId())).withRel("room"));
     }
 
     @Override
@@ -73,7 +80,9 @@ public class BookingServiceImpl implements BookingService {
                 booking.setTotalValue(booking.getTotalValue().add(roomService.getPrice()));
             }
         });
-        return mapper.mapTo(bookingRepository.save(booking),BookingOutputDTO.class);
+        return mapper.mapTo(bookingRepository.save(booking),BookingOutputDTO.class)
+                .add(linkTo(methodOn(BookingController.class).findById(booking.getId())).withSelfRel())
+                .add(linkTo(methodOn(RoomController.class).findById(booking.getRoom().getId())).withRel("room"));
     }
 
     @Override
@@ -93,7 +102,9 @@ public class BookingServiceImpl implements BookingService {
         checkIn.setDate(new Date());
         checkIn.setEmployee(employee);
         booking.setCheckIn(checkIn);
-        return mapper.mapTo(bookingRepository.save(booking),BookingOutputDTO.class);
+        return mapper.mapTo(bookingRepository.save(booking),BookingOutputDTO.class)
+                .add(linkTo(methodOn(BookingController.class).findById(booking.getId())).withSelfRel())
+                .add(linkTo(methodOn(RoomController.class).findById(booking.getRoom().getId())).withRel("room"));
     }
 
     @Override
@@ -115,19 +126,28 @@ public class BookingServiceImpl implements BookingService {
         booking.setCheckOut(checkOut);
         booking.setBookingStatus(BookingStatus.FINISHED);
         booking.getRoom().setAvailable(true);
-        return mapper.mapTo(bookingRepository.save(booking),BookingOutputDTO.class);
+        return mapper.mapTo(bookingRepository.save(booking),BookingOutputDTO.class)
+                .add(linkTo(methodOn(BookingController.class).findById(booking.getId())).withSelfRel())
+                .add(linkTo(methodOn(RoomController.class).findById(booking.getRoom().getId())).withRel("room"));
     }
 
     @Override
     public List<BookingSimpleOutputDTO> findAll() {
-        return mapper.toList(bookingRepository.findAll(), BookingSimpleOutputDTO.class);
+        List<BookingSimpleOutputDTO> bookingDTO = mapper
+                .toList(bookingRepository.findAll(), BookingSimpleOutputDTO.class);
+        return bookingDTO.stream()
+                .map(outputDTO -> outputDTO.add(linkTo(methodOn(BookingController.class)
+                        .findById(outputDTO.getKey()))
+                        .withSelfRel())).toList();
     }
 
     @Override
     public BookingOutputDTO findById(Long id) {
         var booking = bookingRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Não foi encontrado nenhuma reserva com esse id."));
-        return mapper.mapTo(booking,BookingOutputDTO.class);
+        return mapper.mapTo(booking,BookingOutputDTO.class)
+                .add(linkTo(methodOn(BookingController.class).findById(booking.getId())).withSelfRel())
+                .add(linkTo(methodOn(RoomController.class).findById(booking.getRoom().getId())).withRel("room"));
     }
 
     @Override
@@ -136,7 +156,9 @@ public class BookingServiceImpl implements BookingService {
                 .orElseThrow(() -> new ResourceNotFoundException("Não foi encontrado nenhuma reserva com esse id."));
         booking.setBookingStatus(BookingStatus.CANCELED);
         booking.getRoom().setAvailable(true);
-        return mapper.mapTo(booking,BookingOutputDTO.class);
+        return mapper.mapTo(booking,BookingOutputDTO.class)
+                .add(linkTo(methodOn(BookingController.class).findById(booking.getId())).withSelfRel())
+                .add(linkTo(methodOn(RoomController.class).findById(booking.getRoom().getId())).withRel("room"));
     }
 
     @Override

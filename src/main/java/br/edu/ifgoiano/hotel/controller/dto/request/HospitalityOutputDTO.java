@@ -1,4 +1,4 @@
-package br.edu.ifgoiano.hotel.controller.dto.request.userDTO;
+package br.edu.ifgoiano.hotel.controller.dto.request;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
@@ -9,21 +9,24 @@ import lombok.Setter;
 import org.springframework.hateoas.RepresentationModel;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 
-@Getter
+
 @AllArgsConstructor
 @NoArgsConstructor
+@Getter
 @Setter
 @JsonPropertyOrder({
         "id",
-        "firstName",
-        "lastName",
-        "email"
+        "name",
+        "description",
+        "price"
 })
-public class UserSimpleOutputDTO extends RepresentationModel<UserSimpleOutputDTO> implements Serializable{
+public class HospitalityOutputDTO extends RepresentationModel<HospitalityOutputDTO> implements Serializable {
     @JsonProperty("id")
     private Long key;
-    private String firstName;
-    private String lastName;
-    private String email;
+    private String name;
+    private String description;
+    private BigDecimal price;
+
 }

@@ -1,16 +1,17 @@
 package br.edu.ifgoiano.hotel.service;
 
+import br.edu.ifgoiano.hotel.controller.dto.request.ConvenienceOutputDTO;
 import br.edu.ifgoiano.hotel.model.Convenience;
 
 import java.util.List;
 
 public interface ConvenienceService {
 
-    Convenience create(Convenience convenience);
+    ConvenienceOutputDTO create(Convenience convenience);
 
-    List<Convenience> findAll();
+    List<ConvenienceOutputDTO> findAll();
 
-    Convenience update(Long id, Convenience convenience);
+    ConvenienceOutputDTO update(Long id, Convenience convenience);
 
     void delete(Long id);
 }

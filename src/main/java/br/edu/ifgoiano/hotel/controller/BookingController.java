@@ -84,7 +84,7 @@ public class BookingController {
     @PutMapping("{bookingId}/checkIn")
     @Operation(summary = "Realizar checkIn")
     @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "CheckIn realizado com sucesso.",content = { @Content(mediaType = "application/json", schema = @Schema(implementation = BookingOutputDTO.class))}),
+            @ApiResponse(responseCode = "201", description = "CheckIn realizado com sucesso.",content = { @Content(mediaType = "application/json", schema = @Schema(implementation = BookingOutputDTO.class))}),
             @ApiResponse(responseCode = "401", description = "Acesso negado.",content = { @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorDetails.class))}),
             @ApiResponse(responseCode = "404", description = "Não é possível fazer checkIn de reserva cancelada.",content = { @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorDetails.class))})
     })
@@ -96,7 +96,7 @@ public class BookingController {
     @PutMapping("{bookingId}/checkOut")
     @Operation(summary = "Realizar checkOut")
     @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "CheckOut realizado com sucesso.",content = { @Content(mediaType = "application/json", schema = @Schema(implementation = BookingOutputDTO.class))}),
+            @ApiResponse(responseCode = "201", description = "CheckOut realizado com sucesso.",content = { @Content(mediaType = "application/json", schema = @Schema(implementation = BookingOutputDTO.class))}),
             @ApiResponse(responseCode = "401", description = "Acesso negado.",content = { @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorDetails.class))}),
             @ApiResponse(responseCode = "404", description = "Não é possível fazer checkOut de reserva cancelada.",content = { @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorDetails.class))})
     })
@@ -108,7 +108,7 @@ public class BookingController {
     @PutMapping("{id}/cancel")
     @Operation(summary = "Cancelar reserva")
     @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "Reserva cancelada com sucesso.",content = { @Content(mediaType = "application/json", schema = @Schema(implementation = BookingOutputDTO.class))}),
+            @ApiResponse(responseCode = "201", description = "Reserva cancelada com sucesso.",content = { @Content(mediaType = "application/json", schema = @Schema(implementation = BookingOutputDTO.class))}),
             @ApiResponse(responseCode = "401", description = "Acesso negado.",content = { @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorDetails.class))}),
             @ApiResponse(responseCode = "404", description = "Não foi encontrado nenhuma reserva com esse id.",content = { @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorDetails.class))})
     })

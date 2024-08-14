@@ -63,13 +63,13 @@ public class RoomController {
     })
     public ResponseEntity<MessageResponseDTO> uploadPhoto(@PathVariable Long roomId, @RequestParam("photo") MultipartFile photo) {
         var message = fileStorageService.saveFile(roomId, photo);
-        return ResponseEntity.status(HttpStatus.OK).body(message);
+        return ResponseEntity.status(HttpStatus.CREATED).body(message);
     }
 
     @GetMapping("/{roomId}/download-photo/{filename:.+}")
     @Operation(summary = "Baixar de uma foto específico")
     @ApiResponses({
-            @ApiResponse(responseCode = "201", description = "Download iniciado com sucesso.",content = { @Content(mediaType = "application/json", schema = @Schema(implementation = Resource.class))}),
+            @ApiResponse(responseCode = "200", description = "Download iniciado com sucesso.",content = { @Content(mediaType = "application/json", schema = @Schema(implementation = Resource.class))}),
             @ApiResponse(responseCode = "401", description = "Acesso negado.",content = { @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorDetails.class))})
     })
     public ResponseEntity<Resource> downloadPhoto(
@@ -85,7 +85,7 @@ public class RoomController {
     @GetMapping("/{roomId}/photo")
     @Operation(summary = "Busca a foto de um quarto")
     @ApiResponses({
-            @ApiResponse(responseCode = "201", description = "Foto do Quarto buscada com sucesso.",content = { @Content(mediaType = "application/json", schema = @Schema(implementation = Resource.class))}),
+            @ApiResponse(responseCode = "200", description = "Foto do Quarto buscada com sucesso.",content = { @Content(mediaType = "application/json", schema = @Schema(implementation = Resource.class))}),
             @ApiResponse(responseCode = "401", description = "Acesso negado.",content = { @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorDetails.class))})
     })
     public ResponseEntity<List<FileDetails>> listAllPhotos(@PathVariable Long roomId) {

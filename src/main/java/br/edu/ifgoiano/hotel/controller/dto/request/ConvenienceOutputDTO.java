@@ -1,6 +1,5 @@
 package br.edu.ifgoiano.hotel.controller.dto.request;
 
-import br.edu.ifgoiano.hotel.controller.dto.request.userDTO.UserSimpleOutputDTO;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import lombok.AllArgsConstructor;
@@ -10,27 +9,22 @@ import lombok.Setter;
 import org.springframework.hateoas.RepresentationModel;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
-
 
 @Getter
 @Setter
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 @JsonPropertyOrder({
         "id",
-        "text",
-        "date",
-        "client"
+        "name",
+        "description"
 })
-public class CommentOutputDTO extends RepresentationModel<CommentOutputDTO> implements Serializable {
+public class ConvenienceOutputDTO extends RepresentationModel<ConvenienceOutputDTO> implements Serializable {
 
     @JsonProperty("id")
     private Long key;
 
-    private String text;
+    private String name;
 
-    private LocalDateTime date;
-
-    private UserSimpleOutputDTO client;
+    private String description;
 }

@@ -6,8 +6,8 @@ import br.edu.ifgoiano.hotel.controller.dto.request.roomDTO.RoomInputDTO;
 import br.edu.ifgoiano.hotel.controller.dto.request.roomDTO.RoomNoCommentOutputDTO;
 import br.edu.ifgoiano.hotel.controller.dto.request.roomDTO.RoomOutputDTO;
 import br.edu.ifgoiano.hotel.controller.exception.ErrorDetails;
-import br.edu.ifgoiano.hotel.model.FileDetails;
 import br.edu.ifgoiano.hotel.model.FileResponse;
+import br.edu.ifgoiano.hotel.model.FileResponseDownload;
 import br.edu.ifgoiano.hotel.model.Room;
 import br.edu.ifgoiano.hotel.service.FileStorageService;
 import br.edu.ifgoiano.hotel.service.RoomService;
@@ -61,7 +61,7 @@ public class RoomController {
             @ApiResponse(responseCode = "201", description = "Foto salva com sucesso.",content = { @Content(mediaType = "application/json", schema = @Schema(implementation = MessageResponseDTO.class))}),
             @ApiResponse(responseCode = "401", description = "Acesso negado.",content = { @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorDetails.class))})
     })
-    public ResponseEntity<MessageResponseDTO> uploadPhoto(@PathVariable Long roomId, @RequestParam("photo") MultipartFile photo) {
+    public ResponseEntity<FileResponse> uploadPhoto(@PathVariable Long roomId, @RequestParam("photo") MultipartFile photo) {
         var message = fileStorageService.saveFile(roomId, photo);
         return ResponseEntity.status(HttpStatus.OK).body(message);
     }
@@ -69,7 +69,7 @@ public class RoomController {
     @GetMapping("/{roomId}/download-photo/{filename:.+}")
     @Operation(summary = "Baixar de uma foto específico")
     @ApiResponses({
-            @ApiResponse(responseCode = "201", description = "Download iniciado com sucesso.",content = { @Content(mediaType = "application/json", schema = @Schema(implementation = Resource.class))}),
+            @ApiResponse(responseCode = "200", description = "Download iniciado com sucesso.",content = { @Content(mediaType = "application/json", schema = @Schema(implementation = Resource.class))}),
             @ApiResponse(responseCode = "401", description = "Acesso negado.",content = { @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorDetails.class))})
     })
     public ResponseEntity<Resource> downloadPhoto(
@@ -83,22 +83,30 @@ public class RoomController {
     }
 
     @GetMapping("/{roomId}/photo")
-    @Operation(summary = "Busca a foto de um quarto")
+    @Operation(summary = "Busca as fotos de um quarto")
     @ApiResponses({
-            @ApiResponse(responseCode = "201", description = "Foto do Quarto buscada com sucesso.",content = { @Content(mediaType = "application/json", schema = @Schema(implementation = Resource.class))}),
+            @ApiResponse(
+                    responseCode = "201",
+                    description = "Fotos do Quarto buscada com sucesso.",
+                    content = @Content(
+                                    mediaType = "application/json",
+                                    array = @ArraySchema(schema = @Schema(implementation = FileResponse.class))
+                            )
+                    ),
             @ApiResponse(responseCode = "401", description = "Acesso negado.",content = { @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorDetails.class))})
     })
-    public ResponseEntity<List<FileDetails>> listAllPhotos(@PathVariable Long roomId) {
+    public ResponseEntity<List<FileResponse>> listAllPhotos(@PathVariable Long roomId) {
         List<FileResponse> fileResponses = fileStorageService.downloadAllPhotos(roomId);
-        List<FileDetails> fileDetailsList = fileResponses.stream()
-                .map(fileResponse -> new FileDetails(
-                        fileResponse.getResource().getFilename(),
-                        fileResponse.getContentType(),
-                        "/api/v1/hotel/rooms/" + roomId + "/download-photo/" + fileResponse.getResource().getFilename()
-                ))
-                .collect(Collectors.toList());
+//        List<FileResponse> fileDetailsList = fileResponses.stream()
+//                .map(fileResponse -> new FileDetails(
+//                        fileResponse.getResource().getFilename(),
+//                        fileResponse.getContentType(),
+//                        "/api/v1/hotel/rooms/" + roomId + "/download-photo/" + fileResponse.getResource().getFilename(),
+//                        fileResponse.getSize()
+//                ))
+//                .collect(Collectors.toList());
 
-        return ResponseEntity.ok(fileDetailsList);
+        return ResponseEntity.ok(fileResponses);
     }
 
     @GetMapping

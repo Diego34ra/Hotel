@@ -8,6 +8,9 @@ import org.springframework.core.io.Resource;
 @AllArgsConstructor
 @NoArgsConstructor
 public class FileResponse {
-    private Resource resource;
+//    private Resource resource;
+    private String fileName;
     private String contentType;
+    private String size;
+    private String downloadUrl;
 }

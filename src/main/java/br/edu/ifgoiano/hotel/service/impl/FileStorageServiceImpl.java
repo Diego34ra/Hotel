@@ -2,6 +2,7 @@ package br.edu.ifgoiano.hotel.service.impl;
 
 import br.edu.ifgoiano.hotel.controller.dto.request.MessageResponseDTO;
 import br.edu.ifgoiano.hotel.model.FileResponse;
+import br.edu.ifgoiano.hotel.model.FileResponseDownload;
 import br.edu.ifgoiano.hotel.service.FileStorageService;
 import org.springframework.core.io.Resource;
 import org.springframework.beans.factory.annotation.Value;
@@ -33,25 +34,27 @@ public class FileStorageServiceImpl implements FileStorageService {
     }
 
     @Override
-    public MessageResponseDTO saveFile(Long roomId, MultipartFile file) {
+    public FileResponse saveFile(Long roomId, MultipartFile file) {
         try {
             Path uploadPath = Paths.get(getAbsolutePath() + uploadDir, roomId.toString());
             Files.createDirectories(uploadPath);
             Path filePath = uploadPath.resolve(Objects.requireNonNull(file.getOriginalFilename()));
             Files.copy(file.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
-            return MessageResponseDTO
-                    .builder()
-                    .code(200)
-                    .status("Ok")
-                    .message("Foto enviada com sucesso.")
-                    .build();
+
+            String originalFilename = file.getOriginalFilename();
+            String contentType = Files.probeContentType(filePath);
+            long sizeInBytes = Files.size(filePath);
+            String size = formatSize(sizeInBytes);
+            String downloadUri = "/api/v1/hotel/rooms/" + roomId + "/download-photo/"+originalFilename;
+
+            return new FileResponse(originalFilename,contentType,size,downloadUri);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
 
     @Override
-    public FileResponse downloadFile(Long roomId, String filename) {
+    public FileResponseDownload downloadFile(Long roomId, String filename) {
         try {
             Path file = Paths.get(getAbsolutePath()+uploadDir).resolve(roomId.toString()).resolve(filename);
             Resource resource = new UrlResource(file.toUri());
@@ -61,8 +64,8 @@ public class FileStorageServiceImpl implements FileStorageService {
                 if (contentType == null) {
                     contentType = "application/octet-stream";
                 }
-                FileResponse fileResponse = new FileResponse(resource,contentType);
-                return fileResponse;
+
+                return new FileResponseDownload(resource,contentType);
             } else {
                 throw new RuntimeException("File not found or not readable: " + filename);
             }
@@ -85,7 +88,11 @@ public class FileStorageServiceImpl implements FileStorageService {
                             if (contentType == null) {
                                 contentType = "application/octet-stream";
                             }
-                            photos.add(new FileResponse(resource, contentType));
+                            long sizeInBytes = Files.size(file);
+                            String size = formatSize(sizeInBytes);
+                            String originalFilename = resource.getFilename();
+                            String downloadUri = "/api/v1/hotel/rooms/" + roomId + "/download-photo/"+originalFilename;
+                            photos.add(new FileResponse(originalFilename,contentType,size,downloadUri));
                         }
                     } catch (Exception e) {
                         System.out.println("Error processing file: " + file.toString());
@@ -96,5 +103,16 @@ public class FileStorageServiceImpl implements FileStorageService {
             throw new RuntimeException("Error while retrieving photos for room: " + roomId, e);
         }
         return photos;
+    }
+
+    public static String formatSize(long sizeInBytes) {
+        double size = sizeInBytes;
+        String[] units = {"B", "KB", "MB", "GB", "TB"};
+        int unitIndex = 0;
+        while (size >= 1024 && unitIndex < units.length - 1) {
+            size /= 1024;
+            unitIndex++;
+        }
+        return String.format("%.2f %s", size, units[unitIndex]);
     }
 }

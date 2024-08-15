@@ -4,15 +4,12 @@ import br.edu.ifgoiano.hotel.controller.dto.request.roomDTO.RoomSimpleOutputDTO;
 import br.edu.ifgoiano.hotel.controller.dto.request.userDTO.UserSimpleOutputDTO;
 import br.edu.ifgoiano.hotel.model.BookingStatus;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.hateoas.RepresentationModel;
 
-import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
@@ -31,9 +28,8 @@ import java.util.Date;
         "client",
         "room"
 })
-public class BookingSimpleOutputDTO extends RepresentationModel<BookingSimpleOutputDTO> implements Serializable {
-    @JsonProperty("id")
-    private Long key;
+public class BookingSimpleOutputDTO {
+    private Long id;
     private int days;
     private Date checkInDatePlanned;
     private Date checkOutDatePlanned;

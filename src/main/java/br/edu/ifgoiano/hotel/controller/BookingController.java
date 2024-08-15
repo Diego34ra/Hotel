@@ -76,7 +76,7 @@ public class BookingController {
             @ApiResponse(responseCode = "401", description = "Acesso negado.",content = { @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorDetails.class))}),
             @ApiResponse(responseCode = "404", description = "Não foi encontrado todas as reservas informadas.",content = { @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorDetails.class))})
     })
-    public ResponseEntity<BookingOutputDTO> addHospitality(@PathVariable Long bookingId,@RequestBody HospitalityInputDTO hospitalityDTO){
+    public ResponseEntity<BookingOutputDTO> addHospitality(@PathVariable Long bookingId,@RequestBody HospitalityDTO hospitalityDTO){
         var bookingAddHospitality = bookingService.addhospitality(bookingId,hospitalityDTO.getHospitalityIds());
         return ResponseEntity.status(HttpStatus.CREATED).body(bookingAddHospitality);
     }

@@ -67,8 +67,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     public UserDetailOutputDTO findById(Long id) {
         var user = userRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Não foi encontrado nenhum cliente com esse Id."));
-        return mapper.mapTo(user,UserDetailOutputDTO.class)
-                .add(linkTo(methodOn(UserController.class).findAll()).withRel("list-users"));
+        return mapper.mapTo(user,UserDetailOutputDTO.class);
     }
 
     @Override

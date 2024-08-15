@@ -11,6 +11,6 @@ import java.util.List;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class HospitalityInputDTO {
+public class HospitalityDTO {
     private List<Long> hospitalityIds;
 }

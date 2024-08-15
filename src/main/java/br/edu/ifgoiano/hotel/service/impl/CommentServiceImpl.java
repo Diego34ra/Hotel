@@ -1,6 +1,5 @@
 package br.edu.ifgoiano.hotel.service.impl;
 
-import br.edu.ifgoiano.hotel.controller.CommentController;
 import br.edu.ifgoiano.hotel.controller.dto.mapper.MyModelMapper;
 import br.edu.ifgoiano.hotel.controller.dto.request.CommentInputDTO;
 import br.edu.ifgoiano.hotel.controller.dto.request.CommentOutputDTO;
@@ -18,9 +17,6 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
-
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @Service
 public class CommentServiceImpl implements CommentService {
@@ -54,8 +50,7 @@ public class CommentServiceImpl implements CommentService {
             throw new ResourceNotFoundException("Cliente não fez uma reserva para este quarto.");
 
 
-        return mapper.mapTo(commentRepository.save(commentCreate),CommentOutputDTO.class)
-                .add(linkTo(methodOn(CommentController.class).findAll(roomId)).withRel("list-room-comments"));
+        return mapper.mapTo(commentRepository.save(commentCreate),CommentOutputDTO.class);
     }
 
     @Override
@@ -79,6 +74,9 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public void delete(Long id) {
+        //métodos idempotentes.
+        //Comment comment = commentRepository.findById(id)
+        //        .orElseThrow(() -> new ResourceNotFoundException("Não foi encontrado nenhum comentário com esse id"));
         commentRepository.deleteById(id);
     }
 }

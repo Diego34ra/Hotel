@@ -1,16 +1,12 @@
 package br.edu.ifgoiano.hotel.controller.dto.request;
 
-import br.edu.ifgoiano.hotel.controller.dto.request.bookingDTO.BookingOutputDTO;
 import br.edu.ifgoiano.hotel.controller.dto.request.userDTO.UserSimpleOutputDTO;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.hateoas.RepresentationModel;
 
-import java.io.Serializable;
 import java.time.LocalDateTime;
 
 
@@ -24,10 +20,9 @@ import java.time.LocalDateTime;
         "date",
         "client"
 })
-public class CommentOutputDTO extends RepresentationModel<CommentOutputDTO> implements Serializable {
+public class CommentOutputDTO {
 
-    @JsonProperty("id")
-    private Long key;
+    private Long id;
 
     private String text;
 

@@ -1,6 +1,5 @@
 package br.edu.ifgoiano.hotel.service.impl;
 
-import br.edu.ifgoiano.hotel.controller.RoomController;
 import br.edu.ifgoiano.hotel.controller.dto.mapper.MyModelMapper;
 import br.edu.ifgoiano.hotel.controller.dto.request.roomDTO.RoomInputDTO;
 import br.edu.ifgoiano.hotel.controller.dto.request.roomDTO.RoomNoCommentOutputDTO;
@@ -13,9 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @Service
 public class RoomServiceImpl implements RoomService {
@@ -33,19 +29,14 @@ public class RoomServiceImpl implements RoomService {
 
     @Override
     public List<RoomNoCommentOutputDTO> findAll() {
-        return mapper.toList(roomRepository.findAll(),RoomNoCommentOutputDTO.class)
-                .stream().map(
-                        outputDTO -> outputDTO.add(linkTo(methodOn(RoomController.class)
-                                .findById(outputDTO.getKey())).withSelfRel())
-                ).toList();
+        return mapper.toList(roomRepository.findAll(),RoomNoCommentOutputDTO.class);
     }
 
     @Override
     public RoomOutputDTO findById(Long id) {
         Room room = roomRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Não foi encontrado nenhum quarto com esse Id."));
-        return mapper.mapTo(room,RoomOutputDTO.class)
-                .add(linkTo(methodOn(RoomController.class).findAll()).withRel("list-rooms"));
+        return mapper.mapTo(room,RoomOutputDTO.class);
     }
 
     @Override
@@ -64,12 +55,13 @@ public class RoomServiceImpl implements RoomService {
             room.setAvailable(roomUpdate.getAvailable());
         if(roomUpdate.getDescription() != null)
             room.setDescription(roomUpdate.getDescription());
-        return mapper.mapTo(roomRepository.save(room),RoomOutputDTO.class)
-                .add(linkTo(methodOn(RoomController.class).findAll()).withRel("list-rooms"));
+        return mapper.mapTo(roomRepository.save(room),RoomOutputDTO.class);
     }
 
     @Override
     public void delete(Long id) {
-        roomRepository.deleteById(id);
+        var roomDelete = roomRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Não foi encontrado nenhum quarto com esse Id."));
+        roomRepository.delete(roomDelete);
     }
 }

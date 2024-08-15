@@ -1,7 +1,6 @@
 package br.edu.ifgoiano.hotel.controller;
 
 
-import br.edu.ifgoiano.hotel.controller.dto.request.HospitalityOutputDTO;
 import br.edu.ifgoiano.hotel.controller.exception.ErrorDetails;
 import br.edu.ifgoiano.hotel.model.Hospitality;
 import br.edu.ifgoiano.hotel.service.HospitalityService;
@@ -30,10 +29,10 @@ public class HospitalityController {
     @PostMapping
     @Operation(summary = "Criar uma hospitalidade")
     @ApiResponses({
-            @ApiResponse(responseCode = "201", description = "Hospitalidade criada com sucesso.",content = { @Content(mediaType = "application/json", schema = @Schema(implementation = HospitalityOutputDTO.class))}),
+            @ApiResponse(responseCode = "201", description = "Hospitalidade criada com sucesso.",content = { @Content(mediaType = "application/json", schema = @Schema(implementation = Hospitality.class))}),
             @ApiResponse(responseCode = "401", description = "Acesso negado.",content = { @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorDetails.class))})
     })
-    public ResponseEntity<HospitalityOutputDTO> create(@RequestBody Hospitality hospitality){
+    public ResponseEntity<Hospitality> create(@RequestBody Hospitality hospitality){
         var hospitalityCreated = hospitalityService.create(hospitality);
         return ResponseEntity.status(HttpStatus.CREATED).body(hospitalityCreated);
     }
@@ -46,12 +45,12 @@ public class HospitalityController {
                     description = "Hospitalidades buscadas com sucesso.",
                     content = @Content(
                             mediaType = "application/json",
-                            array = @ArraySchema(schema = @Schema(implementation = HospitalityOutputDTO.class))
+                            array = @ArraySchema(schema = @Schema(implementation = Hospitality.class))
                     )
             ),
             @ApiResponse(responseCode = "401", description = "Acesso negado.",content = { @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorDetails.class))})
     })
-    public ResponseEntity<List<HospitalityOutputDTO>> findAll(){
+    public ResponseEntity<List<Hospitality>> findAll(){
         var hospitalities = hospitalityService.findAll();
         return ResponseEntity.status(HttpStatus.OK).body(hospitalities);
     }
@@ -59,10 +58,10 @@ public class HospitalityController {
     @PutMapping("{id}")
     @Operation(summary = "Atualizar uma a hospitalidade")
     @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "Hospitalidade atualizada com sucesso.",content = { @Content(mediaType = "application/json", schema = @Schema(implementation = HospitalityOutputDTO.class))}),
+            @ApiResponse(responseCode = "200", description = "Hospitalidade atualizada com sucesso.",content = { @Content(mediaType = "application/json", schema = @Schema(implementation = Hospitality.class))}),
             @ApiResponse(responseCode = "401", description = "Acesso negado.",content = { @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorDetails.class))})
     })
-    public ResponseEntity<HospitalityOutputDTO> update(@PathVariable Long id, @RequestBody Hospitality hospitality){
+    public ResponseEntity<Hospitality> update(@PathVariable Long id, @RequestBody Hospitality hospitality){
         var hospitalityUpdated = hospitalityService.update(id, hospitality);
         return ResponseEntity.status(HttpStatus.OK).body(hospitalityUpdated);
     }

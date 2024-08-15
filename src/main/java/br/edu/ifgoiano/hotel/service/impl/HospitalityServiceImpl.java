@@ -1,8 +1,5 @@
 package br.edu.ifgoiano.hotel.service.impl;
 
-import br.edu.ifgoiano.hotel.controller.HospitalityController;
-import br.edu.ifgoiano.hotel.controller.dto.request.HospitalityOutputDTO;
-import br.edu.ifgoiano.hotel.controller.dto.mapper.MyModelMapper;
 import br.edu.ifgoiano.hotel.controller.exception.ResourceNotFoundException;
 import br.edu.ifgoiano.hotel.model.Hospitality;
 import br.edu.ifgoiano.hotel.repository.HospitalityRepository;
@@ -12,27 +9,19 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
-
 @Service
 public class HospitalityServiceImpl implements HospitalityService {
 
     @Autowired
     private HospitalityRepository hospitalityRepository;
-
-    @Autowired
-    private MyModelMapper mapper;
-
     @Override
-    public HospitalityOutputDTO create(Hospitality hospitality) {
-        return mapper.mapTo(hospitalityRepository.save(hospitality), HospitalityOutputDTO.class)
-                .add(linkTo(methodOn(HospitalityController.class).findAll()).withRel("list-hospitality"));
+    public Hospitality create(Hospitality hospitality) {
+        return hospitalityRepository.save(hospitality);
     }
 
     @Override
-    public List<HospitalityOutputDTO> findAll() {
-        return mapper.toList(hospitalityRepository.findAll(), HospitalityOutputDTO.class);
+    public List<Hospitality> findAll() {
+        return hospitalityRepository.findAll();
     }
 
     @Override
@@ -43,7 +32,7 @@ public class HospitalityServiceImpl implements HospitalityService {
     }
 
     @Override
-    public HospitalityOutputDTO update(Long id, Hospitality hospitalityUpdate) {
+    public Hospitality update(Long id, Hospitality hospitalityUpdate) {
         Hospitality hospitality = hospitalityRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Não foi encontrado nenhum serviço de quarto com esse id."));
         if(hospitalityUpdate.getName().isEmpty())
@@ -52,8 +41,7 @@ public class HospitalityServiceImpl implements HospitalityService {
             hospitality.setDescription(hospitalityUpdate.getDescription());
         if(hospitalityUpdate.getPrice() != null)
             hospitality.setPrice(hospitalityUpdate.getPrice());
-        return mapper.mapTo(hospitalityRepository.save(hospitality), HospitalityOutputDTO.class)
-                .add(linkTo(methodOn(HospitalityController.class).findAll()).withRel("list-hospitality"));
+        return hospitalityRepository.save(hospitality);
     }
 
     @Override

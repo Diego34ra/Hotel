@@ -3,7 +3,6 @@ package br.edu.ifgoiano.hotel.controller.dto.request.userDTO;
 import br.edu.ifgoiano.hotel.model.Phone;
 import br.edu.ifgoiano.hotel.model.UserRole;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,15 +17,6 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Setter
-@JsonPropertyOrder({
-        "id",
-        "firstName",
-        "lastName",
-        "cpf",
-        "email",
-        "role",
-        "phones"
-})
 public class UserDetailOutputDTO  extends RepresentationModel<UserDetailOutputDTO> implements Serializable {
     @JsonProperty("id")
     private Long key;

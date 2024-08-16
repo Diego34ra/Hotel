@@ -23,9 +23,9 @@ public class Booking {
 
     private int days;
 
-    private Date checkInDate;
+    private Date checkInDatePlanned;
 
-    private Date checkOutDate;
+    private Date checkOutDatePlanned;
 
     private BigDecimal totalValue;
 

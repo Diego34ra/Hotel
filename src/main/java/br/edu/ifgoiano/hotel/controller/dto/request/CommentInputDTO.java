@@ -5,12 +5,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.List;
-
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
-public class HospitalityDTO {
-    private List<Long> hospitalityIds;
+@AllArgsConstructor
+public class CommentInputDTO {
+    private String text;
 }

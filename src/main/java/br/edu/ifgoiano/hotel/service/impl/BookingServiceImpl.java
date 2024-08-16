@@ -1,6 +1,11 @@
 package br.edu.ifgoiano.hotel.service.impl;
 
+import br.edu.ifgoiano.hotel.controller.BookingController;
+import br.edu.ifgoiano.hotel.controller.RoomController;
 import br.edu.ifgoiano.hotel.controller.dto.mapper.MyModelMapper;
+import br.edu.ifgoiano.hotel.controller.dto.request.bookingDTO.BookingInputDTO;
+import br.edu.ifgoiano.hotel.controller.dto.request.bookingDTO.BookingOutputDTO;
+import br.edu.ifgoiano.hotel.controller.dto.request.bookingDTO.BookingSimpleOutputDTO;
 import br.edu.ifgoiano.hotel.controller.exception.ResourceBadRequestException;
 import br.edu.ifgoiano.hotel.controller.exception.ResourceNotFoundException;
 import br.edu.ifgoiano.hotel.model.*;
@@ -15,6 +20,9 @@ import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.List;
+
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @Service
 public class BookingServiceImpl implements BookingService {
@@ -38,24 +46,28 @@ public class BookingServiceImpl implements BookingService {
     private MyModelMapper mapper;
 
     @Override
-    public Booking create(Booking booking) {
-        User client = userService.findById(booking.getClient().getId());
+    public BookingOutputDTO create(BookingInputDTO booking) {
+        var bookingCreate = mapper.mapTo(booking,Booking.class);
 
-        Room room = mapper.mapTo(roomService.findById(booking.getRoom().getId()), Room.class);
+        User client = mapper.mapTo(userService.findById(bookingCreate.getClient().getId()), User.class);
+
+        Room room = mapper.mapTo(roomService.findById(bookingCreate.getRoom().getId()), Room.class);
 
         if(!room.getAvailable())
             throw new ResourceBadRequestException("O quarto não está disponível para reserva");
         room.setAvailable(false);
 
-        booking.setClient(client);
-        booking.setRoom(room);
-        booking.setTotalValue(booking.getSumTotalValue(room.getPrice()));
-        booking.setBookingStatus(BookingStatus.getPadrao());
-        return bookingRepository.save(booking);
+        bookingCreate.setClient(client);
+        bookingCreate.setRoom(room);
+        bookingCreate.setTotalValue(bookingCreate.getSumTotalValue(room.getPrice()));
+        bookingCreate.setBookingStatus(BookingStatus.getPadrao());
+        return mapper.mapTo(bookingRepository.save(bookingCreate),BookingOutputDTO.class)
+                .add(linkTo(methodOn(BookingController.class).findById(bookingCreate.getId())).withSelfRel())
+                .add(linkTo(methodOn(RoomController.class).findById(booking.getRoom().getId())).withRel("room"));
     }
 
     @Override
-    public Booking addhospitality(Long bookingId, List<Long> hospitalityIds) {
+    public BookingOutputDTO addhospitality(Long bookingId, List<Long> hospitalityIds) {
         Booking booking = bookingRepository.findById(bookingId)
                 .orElseThrow(() -> new ResourceNotFoundException("Não foi encontrado todas as reservas informadas."));
 
@@ -68,15 +80,17 @@ public class BookingServiceImpl implements BookingService {
                 booking.setTotalValue(booking.getTotalValue().add(roomService.getPrice()));
             }
         });
-        return bookingRepository.save(booking);
+        return mapper.mapTo(bookingRepository.save(booking),BookingOutputDTO.class)
+                .add(linkTo(methodOn(BookingController.class).findById(booking.getId())).withSelfRel())
+                .add(linkTo(methodOn(RoomController.class).findById(booking.getRoom().getId())).withRel("room"));
     }
 
     @Override
-    public Booking checkIn(Long bookingId, Long empolyeeId) {
+    public BookingOutputDTO checkIn(Long bookingId, Long empolyeeId) {
         Booking booking = bookingRepository.findById(bookingId)
                 .orElseThrow(() -> new ResourceNotFoundException("Não foi encontrado nenhuma reserva com esse id."));
 
-        User employee = userService.findById(empolyeeId);
+        User employee = mapper.mapTo(userService.findById(empolyeeId), User.class);
 
         if(booking.getBookingStatus() == BookingStatus.CANCELED)
             throw new ResourceBadRequestException("Não é possível fazer checkIn de reserva cancelada.");
@@ -88,15 +102,17 @@ public class BookingServiceImpl implements BookingService {
         checkIn.setDate(new Date());
         checkIn.setEmployee(employee);
         booking.setCheckIn(checkIn);
-        return bookingRepository.save(booking);
+        return mapper.mapTo(bookingRepository.save(booking),BookingOutputDTO.class)
+                .add(linkTo(methodOn(BookingController.class).findById(booking.getId())).withSelfRel())
+                .add(linkTo(methodOn(RoomController.class).findById(booking.getRoom().getId())).withRel("room"));
     }
 
     @Override
-    public Booking checkOut(Long bookingId, Long empolyeeId) {
+    public BookingOutputDTO checkOut(Long bookingId, Long empolyeeId) {
         Booking booking = bookingRepository.findById(bookingId)
                 .orElseThrow(() -> new ResourceNotFoundException("Não foi encontrado nenhuma reserva com esse id."));
 
-        User employee = userService.findById(empolyeeId);
+        User employee = mapper.mapTo(userService.findById(empolyeeId), User.class);
 
         if(booking.getBookingStatus() == BookingStatus.CANCELED)
             throw new ResourceBadRequestException("Não é possível fazer checkOut de reserva cancelada.");
@@ -110,28 +126,47 @@ public class BookingServiceImpl implements BookingService {
         booking.setCheckOut(checkOut);
         booking.setBookingStatus(BookingStatus.FINISHED);
         booking.getRoom().setAvailable(true);
-        return bookingRepository.save(booking);
+        return mapper.mapTo(bookingRepository.save(booking),BookingOutputDTO.class)
+                .add(linkTo(methodOn(BookingController.class).findById(booking.getId())).withSelfRel())
+                .add(linkTo(methodOn(RoomController.class).findById(booking.getRoom().getId())).withRel("room"));
     }
 
     @Override
-    public List<Booking> findAll() {
-        return bookingRepository.findAll();
+    public List<BookingSimpleOutputDTO> findAll() {
+        List<BookingSimpleOutputDTO> bookingDTO = mapper
+                .toList(bookingRepository.findAll(), BookingSimpleOutputDTO.class);
+        return bookingDTO.stream()
+                .map(outputDTO -> outputDTO.add(linkTo(methodOn(BookingController.class)
+                        .findById(outputDTO.getKey()))
+                        .withSelfRel())).toList();
     }
 
     @Override
-    public Booking cancel(Long id) {
+    public BookingOutputDTO findById(Long id) {
+        var booking = bookingRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Não foi encontrado nenhuma reserva com esse id."));
+        var roomNoCommentDTO = roomService.findByIdWithoutComment(booking.getRoom().getId());
+        BookingOutputDTO bookingOutputDTO = mapper.mapTo(booking,BookingOutputDTO.class);
+        bookingOutputDTO.setRoom(roomNoCommentDTO);
+        return bookingOutputDTO
+                .add(linkTo(methodOn(BookingController.class).findById(booking.getId())).withSelfRel())
+                .add(linkTo(methodOn(RoomController.class).findById(booking.getRoom().getId())).withRel("room"));
+    }
+
+    @Override
+    public BookingOutputDTO cancel(Long id) {
         Booking booking = bookingRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Não foi encontrado nenhuma reserva com esse id."));
         booking.setBookingStatus(BookingStatus.CANCELED);
         booking.getRoom().setAvailable(true);
-        return bookingRepository.save(booking);
+        return mapper.mapTo(booking,BookingOutputDTO.class)
+                .add(linkTo(methodOn(BookingController.class).findById(booking.getId())).withSelfRel())
+                .add(linkTo(methodOn(RoomController.class).findById(booking.getRoom().getId())).withRel("room"));
     }
 
     @Override
     public void delete(Long id) {
-        Booking booking = bookingRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Não foi encontrado nenhuma reserva com esse id."));
-        bookingRepository.delete(booking);
+        bookingRepository.deleteById(id);
     }
 
 }

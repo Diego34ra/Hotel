@@ -1,15 +1,19 @@
 package br.edu.ifgoiano.hotel.controller.dto.request.bookingDTO;
 
+import br.edu.ifgoiano.hotel.controller.dto.request.roomDTO.RoomNoCommentOutputDTO;
 import br.edu.ifgoiano.hotel.controller.dto.request.roomDTO.RoomOutputDTO;
 import br.edu.ifgoiano.hotel.controller.dto.request.userDTO.UserDetailOutputDTO;
 import br.edu.ifgoiano.hotel.model.*;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.hateoas.RepresentationModel;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
@@ -30,8 +34,9 @@ import java.util.Date;
         "checkIn",
         "checkOut"
 })
-public class BookingOutputDTO {
-    private Long id;
+public class BookingOutputDTO extends RepresentationModel<BookingOutputDTO> implements Serializable {
+    @JsonProperty("id")
+    private Long key;
     private int days;
     private Date checkInDatePlanned;
     private Date checkOutDatePlanned;
@@ -40,5 +45,5 @@ public class BookingOutputDTO {
     private CheckOut checkOut;
     private BookingStatus bookingStatus;
     private UserDetailOutputDTO client;
-    private RoomOutputDTO room;
+    private RoomNoCommentOutputDTO room;
 }

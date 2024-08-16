@@ -1,6 +1,7 @@
 package br.edu.ifgoiano.hotel.controller.dto.request.userDTO;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,6 +14,12 @@ import java.io.Serializable;
 @AllArgsConstructor
 @NoArgsConstructor
 @Setter
+@JsonPropertyOrder({
+        "id",
+        "firstName",
+        "lastName",
+        "email"
+})
 public class UserSimpleOutputDTO extends RepresentationModel<UserSimpleOutputDTO> implements Serializable{
     @JsonProperty("id")
     private Long key;

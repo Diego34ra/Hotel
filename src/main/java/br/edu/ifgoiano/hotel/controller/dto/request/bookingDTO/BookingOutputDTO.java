@@ -1,5 +1,6 @@
 package br.edu.ifgoiano.hotel.controller.dto.request.bookingDTO;
 
+import br.edu.ifgoiano.hotel.controller.dto.request.roomDTO.RoomNoCommentOutputDTO;
 import br.edu.ifgoiano.hotel.controller.dto.request.roomDTO.RoomOutputDTO;
 import br.edu.ifgoiano.hotel.controller.dto.request.userDTO.UserDetailOutputDTO;
 import br.edu.ifgoiano.hotel.model.*;
@@ -44,5 +45,5 @@ public class BookingOutputDTO extends RepresentationModel<BookingOutputDTO> impl
     private CheckOut checkOut;
     private BookingStatus bookingStatus;
     private UserDetailOutputDTO client;
-    private RoomOutputDTO room;
+    private RoomNoCommentOutputDTO room;
 }

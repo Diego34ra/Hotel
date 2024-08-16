@@ -11,6 +11,7 @@ public interface RoomService {
     RoomOutputDTO create(RoomInputDTO quarto);
     List<RoomNoCommentOutputDTO> findAll();
     RoomOutputDTO findById(Long id);
+    RoomNoCommentOutputDTO findByIdWithoutComment(Long id);
     RoomOutputDTO update(Long id,Room room);
     void delete(Long id);
 }

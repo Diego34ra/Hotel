@@ -49,7 +49,8 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         userCreate.getPhones().forEach(phone -> phone.setUser(userCreate));
 
         UserDetailOutputDTO userDTO = mapper.mapTo(userRepository.save(userCreate), UserDetailOutputDTO.class);
-        return userDTO.add(linkTo(methodOn(UserController.class).findById(userDTO.getKey())).withSelfRel());
+        return userDTO.add(linkTo(methodOn(UserController.class).findAll()).withRel("list-users"))
+                .add(linkTo(methodOn(UserController.class).findById(userDTO.getKey())).withSelfRel());
     }
 
     @Override
@@ -67,7 +68,8 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     public UserDetailOutputDTO findById(Long id) {
         var user = userRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Não foi encontrado nenhum cliente com esse Id."));
-        return mapper.mapTo(user,UserDetailOutputDTO.class);
+        return mapper.mapTo(user,UserDetailOutputDTO.class)
+                .add(linkTo(methodOn(UserController.class).findAll()).withRel("list-users"));
     }
 
     @Override
@@ -96,7 +98,8 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         }
 
         UserDetailOutputDTO userDTO = mapper.mapTo(userRepository.save(user), UserDetailOutputDTO.class);
-        return userDTO.add(linkTo(methodOn(UserController.class).findById(userDTO.getKey())).withSelfRel());
+        return userDTO.add(linkTo(methodOn(UserController.class).findAll()).withRel("list-users"))
+                .add(linkTo(methodOn(UserController.class).findById(userDTO.getKey())).withSelfRel());
     }
 
     @Override

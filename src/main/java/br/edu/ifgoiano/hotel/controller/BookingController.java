@@ -72,7 +72,7 @@ public class BookingController {
     @PutMapping("{bookingId}/hospitality")
     @Operation(summary = "Adicionar hospitalidade")
     @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "Hospitalidade adicionada com sucesso.",content = { @Content(mediaType = "application/json", schema = @Schema(implementation = BookingOutputDTO.class))}),
+            @ApiResponse(responseCode = "201", description = "Hospitalidade adicionada com sucesso.",content = { @Content(mediaType = "application/json", schema = @Schema(implementation = BookingOutputDTO.class))}),
             @ApiResponse(responseCode = "401", description = "Acesso negado.",content = { @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorDetails.class))}),
             @ApiResponse(responseCode = "404", description = "Não foi encontrado todas as reservas informadas.",content = { @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorDetails.class))})
     })

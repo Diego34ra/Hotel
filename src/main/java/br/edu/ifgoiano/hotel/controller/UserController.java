@@ -74,7 +74,7 @@ public class UserController {
             @ApiResponse(responseCode = "404", description = "Usuário não encontrado.",content = { @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorDetails.class))})
     })
     public ResponseEntity<UserDetailOutputDTO> findById(@PathVariable Long id){
-        UserDetailOutputDTO userOutput = modelMapper.mapTo(userService.findById(id), UserDetailOutputDTO.class);
+        UserDetailOutputDTO userOutput = modelMapper.mapTo(userService.findOneById(id), UserDetailOutputDTO.class);
         return ResponseEntity.status(HttpStatus.OK).body(userOutput);
     }
 

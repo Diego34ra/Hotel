@@ -65,7 +65,14 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
-    public UserDetailOutputDTO findById(Long id) {
+    public User findById(Long id) {
+        return userRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Não foi encontrado nenhum cliente com esse Id."));
+    }
+
+
+    @Override
+    public UserDetailOutputDTO findOneById(Long id) {
         var user = userRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Não foi encontrado nenhum cliente com esse Id."));
         return mapper.mapTo(user,UserDetailOutputDTO.class)

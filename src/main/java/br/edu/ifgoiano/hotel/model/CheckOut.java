@@ -13,7 +13,7 @@ import java.util.Date;
 public class CheckOut {
 
     @Id
-    @Column(name = "checkIn_id")
+    @Column(name = "checkOut_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private Date date;

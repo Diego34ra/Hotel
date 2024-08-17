@@ -1,5 +1,6 @@
 package br.edu.ifgoiano.hotel.controller.dto.request.bookingDTO;
 
+import br.edu.ifgoiano.hotel.controller.dto.request.HospitalityOutputDTO;
 import br.edu.ifgoiano.hotel.controller.dto.request.roomDTO.RoomNoCommentOutputDTO;
 import br.edu.ifgoiano.hotel.controller.dto.request.roomDTO.RoomOutputDTO;
 import br.edu.ifgoiano.hotel.controller.dto.request.userDTO.UserDetailOutputDTO;
@@ -16,6 +17,7 @@ import org.springframework.hateoas.RepresentationModel;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 @Getter
 @Setter
@@ -31,6 +33,7 @@ import java.util.Date;
         "checkOutDatePlanned",
         "client",
         "room",
+        "hospitalities",
         "checkIn",
         "checkOut"
 })
@@ -41,9 +44,10 @@ public class BookingOutputDTO extends RepresentationModel<BookingOutputDTO> impl
     private Date checkInDatePlanned;
     private Date checkOutDatePlanned;
     private BigDecimal totalValue;
-    private CheckIn checkIn;
-    private CheckOut checkOut;
+    private CheckInOutputDTO checkIn;
+    private CheckOutOutputDTO checkOut;
     private BookingStatus bookingStatus;
     private UserDetailOutputDTO client;
     private RoomNoCommentOutputDTO room;
+    private List<HospitalityOutputDTO> hospitalities;
 }

@@ -43,11 +43,17 @@ public class RoomServiceImpl implements RoomService {
     }
 
     @Override
-    public RoomOutputDTO findById(Long id) {
+    public RoomOutputDTO findOneById(Long id) {
         Room room = roomRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Não foi encontrado nenhum quarto com esse Id."));
         return mapper.mapTo(room,RoomOutputDTO.class)
                 .add(linkTo(methodOn(RoomController.class).findAll()).withRel("list-rooms"));
+    }
+
+    @Override
+    public Room findById(Long id) {
+        return roomRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Não foi encontrado nenhum quarto com esse Id."));
     }
 
     @Override

@@ -135,7 +135,7 @@ public class RoomController {
             @ApiResponse(responseCode = "404", description = "Quarto não encontrado.",content = { @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorDetails.class))})
     })
     public ResponseEntity<RoomOutputDTO> findById(@PathVariable Long id){
-        RoomOutputDTO room = roomService.findById(id);
+        RoomOutputDTO room = roomService.findOneById(id);
         return ResponseEntity.status(HttpStatus.OK).body(room);
     }
 

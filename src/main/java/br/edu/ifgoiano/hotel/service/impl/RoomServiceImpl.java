@@ -28,6 +28,7 @@ public class RoomServiceImpl implements RoomService {
     @Override
     public RoomOutputDTO create(RoomInputDTO room) {
         var roomCreate = mapper.mapTo(room,Room.class);
+        roomRepository.save(roomCreate);
         return mapper.mapTo(roomCreate,RoomOutputDTO.class)
                 .add(linkTo(methodOn(RoomController.class).findAll()).withRel("list-rooms"))
                 .add(linkTo(methodOn(RoomController.class).findById(roomCreate.getId())).withSelfRel());

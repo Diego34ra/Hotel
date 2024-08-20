@@ -124,17 +124,6 @@ public class RoomController {
         return ResponseEntity.status(HttpStatus.OK).body(rooms);
     }
 
-//    @GetMapping("teste")
-//    public ResponseEntity<List<RoomNoCommentOutputDTO>> findRooms(
-//            @RequestParam(required = false) RoomType type,
-//            @RequestParam(required = false) Integer capacity,
-//            @RequestParam(required = false) Boolean ascending,
-//            @RequestParam(required = false) Boolean available) {
-//
-//        List<RoomNoCommentOutputDTO> rooms = roomService.findRooms(type, capacity, ascending, available);
-//        return ResponseEntity.status(HttpStatus.OK).body(rooms);
-//    }
-
     @GetMapping("{id}")
     @Operation(summary = "Busca um quarto pelo id")
     @ApiResponses({

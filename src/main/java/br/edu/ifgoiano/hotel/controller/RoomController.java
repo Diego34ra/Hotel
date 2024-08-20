@@ -9,6 +9,7 @@ import br.edu.ifgoiano.hotel.controller.exception.ErrorDetails;
 import br.edu.ifgoiano.hotel.model.FileResponse;
 import br.edu.ifgoiano.hotel.model.FileResponseDownload;
 import br.edu.ifgoiano.hotel.model.Room;
+import br.edu.ifgoiano.hotel.model.RoomType;
 import br.edu.ifgoiano.hotel.service.FileStorageService;
 import br.edu.ifgoiano.hotel.service.RoomService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -97,14 +98,6 @@ public class RoomController {
     })
     public ResponseEntity<List<FileResponse>> listAllPhotos(@PathVariable Long roomId) {
         List<FileResponse> fileResponses = fileStorageService.downloadAllPhotos(roomId);
-//        List<FileResponse> fileDetailsList = fileResponses.stream()
-//                .map(fileResponse -> new FileDetails(
-//                        fileResponse.getResource().getFilename(),
-//                        fileResponse.getContentType(),
-//                        "/api/v1/hotel/rooms/" + roomId + "/download-photo/" + fileResponse.getResource().getFilename(),
-//                        fileResponse.getSize()
-//                ))
-//                .collect(Collectors.toList());
 
         return ResponseEntity.ok(fileResponses);
     }
@@ -122,10 +115,25 @@ public class RoomController {
             ),
             @ApiResponse(responseCode = "401", description = "Acesso negado.",content = { @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorDetails.class))})
     })
-    public ResponseEntity<List<RoomNoCommentOutputDTO>> findAll(){
-        List<RoomNoCommentOutputDTO> rooms = roomService.findAll();
+    public ResponseEntity<List<RoomNoCommentOutputDTO>> findAll(
+            @RequestParam(required = false) RoomType type,
+            @RequestParam(required = false) Integer capacity,
+            @RequestParam(required = false) Boolean ascending,
+            @RequestParam(required = false) Boolean available){
+        List<RoomNoCommentOutputDTO> rooms = roomService.findRooms(type, capacity, ascending, available);
         return ResponseEntity.status(HttpStatus.OK).body(rooms);
     }
+
+//    @GetMapping("teste")
+//    public ResponseEntity<List<RoomNoCommentOutputDTO>> findRooms(
+//            @RequestParam(required = false) RoomType type,
+//            @RequestParam(required = false) Integer capacity,
+//            @RequestParam(required = false) Boolean ascending,
+//            @RequestParam(required = false) Boolean available) {
+//
+//        List<RoomNoCommentOutputDTO> rooms = roomService.findRooms(type, capacity, ascending, available);
+//        return ResponseEntity.status(HttpStatus.OK).body(rooms);
+//    }
 
     @GetMapping("{id}")
     @Operation(summary = "Busca um quarto pelo id")

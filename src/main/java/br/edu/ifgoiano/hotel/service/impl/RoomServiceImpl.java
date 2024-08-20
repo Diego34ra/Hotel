@@ -7,11 +7,13 @@ import br.edu.ifgoiano.hotel.controller.dto.request.roomDTO.RoomNoCommentOutputD
 import br.edu.ifgoiano.hotel.controller.dto.request.roomDTO.RoomOutputDTO;
 import br.edu.ifgoiano.hotel.controller.exception.ResourceNotFoundException;
 import br.edu.ifgoiano.hotel.model.Room;
+import br.edu.ifgoiano.hotel.model.RoomType;
 import br.edu.ifgoiano.hotel.repository.RoomRepository;
 import br.edu.ifgoiano.hotel.service.RoomService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
@@ -30,7 +32,7 @@ public class RoomServiceImpl implements RoomService {
         var roomCreate = mapper.mapTo(room,Room.class);
         roomRepository.save(roomCreate);
         return mapper.mapTo(roomCreate,RoomOutputDTO.class)
-                .add(linkTo(methodOn(RoomController.class).findAll()).withRel("list-rooms"))
+                .add(linkTo(methodOn(RoomController.class).findAll(null,null,null,null)).withRel("list-rooms"))
                 .add(linkTo(methodOn(RoomController.class).findById(roomCreate.getId())).withSelfRel());
     }
 
@@ -44,11 +46,26 @@ public class RoomServiceImpl implements RoomService {
     }
 
     @Override
+    public List<RoomNoCommentOutputDTO> findRooms(RoomType type, Integer capacity, Boolean ascending, Boolean available) {
+        List<Room> roomList = new ArrayList<>();
+        if (ascending != null && ascending) {
+            roomList = roomRepository.findByFilters(type, capacity, available);
+        } else {
+            roomList = roomRepository.findByFiltersDesc(type, capacity, available);
+        }
+        return mapper.toList(roomList,RoomNoCommentOutputDTO.class)
+                .stream().map(
+                        outputDTO -> outputDTO.add(linkTo(methodOn(RoomController.class)
+                                .findById(outputDTO.getKey())).withSelfRel())
+                ).toList();
+    }
+
+    @Override
     public RoomOutputDTO findOneById(Long id) {
         Room room = roomRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Não foi encontrado nenhum quarto com esse Id."));
         return mapper.mapTo(room,RoomOutputDTO.class)
-                .add(linkTo(methodOn(RoomController.class).findAll()).withRel("list-rooms"));
+                .add(linkTo(methodOn(RoomController.class).findAll(null,null,null,null)).withRel("list-rooms"));
     }
 
     @Override
@@ -81,7 +98,7 @@ public class RoomServiceImpl implements RoomService {
         if(roomUpdate.getDescription() != null)
             room.setDescription(roomUpdate.getDescription());
         return mapper.mapTo(roomRepository.save(room),RoomOutputDTO.class)
-                .add(linkTo(methodOn(RoomController.class).findAll()).withRel("list-rooms"))
+                .add(linkTo(methodOn(RoomController.class).findAll(null,null,null,null)).withRel("list-rooms"))
                 .add(linkTo(methodOn(RoomController.class).findById(room.getId())).withSelfRel());
     }
 

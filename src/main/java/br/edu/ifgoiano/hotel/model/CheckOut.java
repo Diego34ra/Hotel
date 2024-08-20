@@ -1,7 +1,9 @@
 package br.edu.ifgoiano.hotel.model;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.Date;
@@ -10,6 +12,8 @@ import java.util.Date;
 @Table(name = "tb_checkOut")
 @Getter
 @Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class CheckOut {
 
     @Id

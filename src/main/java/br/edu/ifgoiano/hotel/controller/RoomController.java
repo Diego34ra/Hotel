@@ -63,7 +63,7 @@ public class RoomController {
     })
     public ResponseEntity<FileResponse> uploadPhoto(@PathVariable Long roomId, @RequestParam("photo") MultipartFile photo) {
         var message = fileStorageService.saveFile(roomId, photo);
-        return ResponseEntity.status(HttpStatus.OK).body(message);
+        return ResponseEntity.status(HttpStatus.CREATED).body(message);
     }
 
     @GetMapping("/{roomId}/download-photo/{filename:.+}")
@@ -86,7 +86,7 @@ public class RoomController {
     @Operation(summary = "Busca as fotos de um quarto")
     @ApiResponses({
             @ApiResponse(
-                    responseCode = "201",
+                    responseCode = "200",
                     description = "Fotos do Quarto buscada com sucesso.",
                     content = @Content(
                                     mediaType = "application/json",
@@ -135,7 +135,7 @@ public class RoomController {
             @ApiResponse(responseCode = "404", description = "Quarto não encontrado.",content = { @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorDetails.class))})
     })
     public ResponseEntity<RoomOutputDTO> findById(@PathVariable Long id){
-        RoomOutputDTO room = roomService.findById(id);
+        RoomOutputDTO room = roomService.findOneById(id);
         return ResponseEntity.status(HttpStatus.OK).body(room);
     }
 

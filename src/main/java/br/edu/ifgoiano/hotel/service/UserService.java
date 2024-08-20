@@ -12,7 +12,9 @@ public interface UserService {
     UserDetailOutputDTO create(UserInputDTO user);
     List<UserSimpleOutputDTO> findAll();
 
-    UserDetailOutputDTO findById(Long id);
+    User findById(Long id);
+
+    UserDetailOutputDTO findOneById(Long id);
 
     UserDetails findByEmail(String email);
 

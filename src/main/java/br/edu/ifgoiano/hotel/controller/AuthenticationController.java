@@ -42,7 +42,7 @@ public class AuthenticationController {
     @PostMapping("login")
     @Operation(summary = "Realizar autenticação")
     @ApiResponses({
-            @ApiResponse(responseCode = "201", description = "Usuário autenticado com sucesso.",content = { @Content(mediaType = "application/json", schema = @Schema(implementation = LoginResponseDTO.class))}),
+            @ApiResponse(responseCode = "200", description = "Usuário autenticado com sucesso.",content = { @Content(mediaType = "application/json", schema = @Schema(implementation = LoginResponseDTO.class))}),
             @ApiResponse(responseCode = "400", description = "Erro ao autenticar usuário.",content = { @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorDetails.class))})
     })
     public ResponseEntity<LoginResponseDTO> login(@RequestBody AuthenticationDTO authenticationDTO){
@@ -55,7 +55,7 @@ public class AuthenticationController {
     @PostMapping("refresh-token")
     @Operation(summary = "Atualizar autenticação")
     @ApiResponses({
-            @ApiResponse(responseCode = "201", description = "Autenticação atualizada com sucesso.",content = { @Content(mediaType = "application/json", schema = @Schema(implementation = RefreshTokenDTO.class))}),
+            @ApiResponse(responseCode = "200", description = "Autenticação atualizada com sucesso.",content = { @Content(mediaType = "application/json", schema = @Schema(implementation = RefreshTokenDTO.class))}),
             @ApiResponse(responseCode = "400", description = "Erro ao atualizar autenticação.",content = { @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorDetails.class))})
     })
     public ResponseEntity<LoginResponseDTO> refreshToken(@RequestBody RefreshTokenDTO refreshTokenDTO){

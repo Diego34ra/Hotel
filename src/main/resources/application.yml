@@ -6,7 +6,7 @@ spring:
       max-request-size: 20MB  # Tamanho máximo da requisição (todos os arquivos somados)
       enabled: true  # Habilita o suporte a multipart
   datasource:
-    url: jdbc:mysql://localhost:3306/hotel?useSSL=false&serverTimezone=UTC
+    url: jdbc:mysql://localhost:3306/hotel?useSSL=false&serverTimezone=UTC&createDatabaseIfNotExist=true
     username: root
     password:
     driver-class-name: com.mysql.cj.jdbc.Driver

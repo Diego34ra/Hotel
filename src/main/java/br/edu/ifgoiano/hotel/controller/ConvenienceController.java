@@ -1,5 +1,6 @@
 package br.edu.ifgoiano.hotel.controller;
 
+import br.edu.ifgoiano.hotel.controller.dto.request.ConvenienceOutputDTO;
 import br.edu.ifgoiano.hotel.controller.exception.ErrorDetails;
 import br.edu.ifgoiano.hotel.model.Convenience;
 import br.edu.ifgoiano.hotel.service.ConvenienceService;
@@ -28,10 +29,10 @@ public class ConvenienceController {
     @PostMapping
     @Operation(summary = "Criar uma comodidade")
     @ApiResponses({
-            @ApiResponse(responseCode = "201", description = "Comodidade criada com sucesso.",content = { @Content(mediaType = "application/json", schema = @Schema(implementation = Convenience.class))}),
+            @ApiResponse(responseCode = "201", description = "Comodidade criada com sucesso.",content = { @Content(mediaType = "application/json", schema = @Schema(implementation = ConvenienceOutputDTO.class))}),
             @ApiResponse(responseCode = "401", description = "Acesso negado.",content = { @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorDetails.class))})
     })
-    public ResponseEntity<Convenience> create(@RequestBody Convenience convenience){
+    public ResponseEntity<ConvenienceOutputDTO> create(@RequestBody Convenience convenience){
         return ResponseEntity.status(HttpStatus.CREATED).body(convenienceService.create(convenience));
     }
 
@@ -48,7 +49,7 @@ public class ConvenienceController {
             ),
             @ApiResponse(responseCode = "401", description = "Acesso negado.",content = { @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorDetails.class))})
     })
-    public ResponseEntity<List<Convenience>> findAll(){
+    public ResponseEntity<List<ConvenienceOutputDTO>> findAll(){
         return ResponseEntity.status(HttpStatus.OK).body(convenienceService.findAll());
     }
 
@@ -57,12 +58,12 @@ public class ConvenienceController {
     @PutMapping("{id}")
     @Operation(summary = "Atualizar uma comodidade")
     @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "Comodidade atualizada com sucesso.",content = { @Content(mediaType = "application/json", schema = @Schema(implementation = Convenience.class))}),
+            @ApiResponse(responseCode = "200", description = "Comodidade atualizada com sucesso.",content = { @Content(mediaType = "application/json", schema = @Schema(implementation = ConvenienceOutputDTO.class))}),
             @ApiResponse(responseCode = "401", description = "Acesso negado.",content = { @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorDetails.class))}),
-            @ApiResponse(responseCode = "404", description = "Comodidade não encontrada.",content = { @Content(mediaType = "application/json", schema = @Schema(implementation = Convenience.class))})
+            @ApiResponse(responseCode = "404", description = "Comodidade não encontrada.",content = { @Content(mediaType = "application/json", schema = @Schema(implementation = ConvenienceOutputDTO.class))})
     })
-    public ResponseEntity<Convenience> update(@PathVariable Long id,@RequestBody Convenience convenience){
-        Convenience convenienceUpdated = convenienceService.update(id,convenience);
+    public ResponseEntity<ConvenienceOutputDTO> update(@PathVariable Long id,@RequestBody Convenience convenience){
+        ConvenienceOutputDTO convenienceUpdated = convenienceService.update(id,convenience);
         return ResponseEntity.status(HttpStatus.OK).body(convenienceUpdated);
     }
 

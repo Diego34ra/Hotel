@@ -37,6 +37,8 @@ public class BookingSimpleOutputDTO extends RepresentationModel<BookingSimpleOut
     private int days;
     private Date checkInDatePlanned;
     private Date checkOutDatePlanned;
+    private Date checkInDate;
+    private Date checkOutDate;
     private BigDecimal totalValue;
     private BookingStatus bookingStatus;
     private UserSimpleOutputDTO client;

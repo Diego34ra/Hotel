@@ -16,10 +16,12 @@ import br.edu.ifgoiano.hotel.service.BookingService;
 import br.edu.ifgoiano.hotel.service.HospitalityService;
 import br.edu.ifgoiano.hotel.service.RoomService;
 import br.edu.ifgoiano.hotel.service.UserService;
-import com.google.gson.Gson;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.List;
 
@@ -49,15 +51,17 @@ public class BookingServiceImpl implements BookingService {
 
     @Override
     public BookingOutputDTO create(BookingInputDTO booking) {
-        var bookingCreate = mapper.mapTo(booking,Booking.class);
+        Booking bookingCreate = mapper.mapTo(booking,Booking.class);
         bookingCreate.setCheckIn(null);
         bookingCreate.setCheckOut(null);
+        bookingCreate.setCheckInDatePlanned(booking.getCheckInDatePlanned());
+        bookingCreate.setCheckOutDatePlanned(booking.getCheckOutDatePlanned());
 
         User client = mapper.mapTo(userService.findById(bookingCreate.getClient().getId()), User.class);
 
         Room room = roomService.findById(bookingCreate.getRoom().getId());
 
-        if(!room.getAvailable())
+        if(!checkAvailability(room.getId(),bookingCreate.getCheckInDatePlanned(), bookingCreate.getCheckOutDatePlanned()))
             throw new ResourceBadRequestException("O quarto não está disponível para reserva");
         room.setAvailable(false);
 
@@ -66,9 +70,12 @@ public class BookingServiceImpl implements BookingService {
         bookingCreate.setTotalValue(bookingCreate.getSumTotalValue(room.getPrice()));
         bookingCreate.setBookingStatus(BookingStatus.getPadrao());
 
-        return mapper.mapTo(bookingRepository.save(bookingCreate),BookingOutputDTO.class)
+        BookingOutputDTO bookingOutputDTO = mapper.mapTo(bookingRepository.save(bookingCreate),BookingOutputDTO.class)
                 .add(linkTo(methodOn(BookingController.class).findById(bookingCreate.getId())).withSelfRel())
                 .add(linkTo(methodOn(RoomController.class).findById(booking.getRoom().getId())).withRel("room"));
+
+        bookingOutputDTO.getRoom().setKey(room.getId());
+        return bookingOutputDTO;
     }
 
     @Override
@@ -193,7 +200,7 @@ public class BookingServiceImpl implements BookingService {
                 .orElseThrow(() -> new ResourceNotFoundException("Não foi encontrado nenhuma reserva com esse id."));
         booking.setBookingStatus(BookingStatus.CANCELED);
         booking.getRoom().setAvailable(true);
-        return mapper.mapTo(booking,BookingOutputDTO.class)
+        return mapper.mapTo(bookingRepository.save(booking),BookingOutputDTO.class)
                 .add(linkTo(methodOn(BookingController.class).findById(booking.getId())).withSelfRel())
                 .add(linkTo(methodOn(RoomController.class).findById(booking.getRoom().getId())).withRel("room"));
     }
@@ -201,6 +208,26 @@ public class BookingServiceImpl implements BookingService {
     @Override
     public void delete(Long id) {
         bookingRepository.deleteById(id);
+    }
+
+    private boolean checkAvailability(Long roomId, Date newBookingCheckInDate, Date newBookingCheckOutDate) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.S");
+        boolean available = true;
+
+        List<Booking> bookings = bookingRepository.findAllByRoomId(roomId);
+
+        for (Booking booking : bookings) {
+            Date existingCheckInDate = booking.getCheckInDatePlanned();
+            Date existingCheckOutDate = booking.getCheckOutDatePlanned();
+
+            if ((newBookingCheckInDate.before(existingCheckOutDate) || newBookingCheckInDate.equals(existingCheckOutDate)) &&
+                    (newBookingCheckOutDate.after(existingCheckInDate) || newBookingCheckOutDate.equals(existingCheckInDate))) {
+                available = false;
+                break;
+            }
+        }
+
+        return available;
     }
 
 }

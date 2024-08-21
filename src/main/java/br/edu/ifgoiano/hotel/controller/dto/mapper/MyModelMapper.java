@@ -42,6 +42,8 @@ public class MyModelMapper {
             @Override
             protected void configure() {
                 map().setKey(source.getId());
+                map().setCheckInDate(source.getCheckIn().getDate());
+                map().setCheckOutDate(source.getCheckOut().getDate());
             }
         });
 

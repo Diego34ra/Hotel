@@ -1,5 +1,6 @@
 package br.edu.ifgoiano.hotel.controller.dto.request.userDTO;
 
+import br.edu.ifgoiano.hotel.model.UserRole;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
@@ -20,7 +21,8 @@ import java.io.Serializable;
         "id",
         "firstName",
         "lastName",
-        "email"
+        "email",
+        "role"
 })
 public class UserSimpleOutputDTO extends RepresentationModel<UserSimpleOutputDTO> implements Serializable{
     @JsonProperty("id")
@@ -28,4 +30,5 @@ public class UserSimpleOutputDTO extends RepresentationModel<UserSimpleOutputDTO
     private String firstName;
     private String lastName;
     private String email;
+    private UserRole role;
 }
